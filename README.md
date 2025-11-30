@@ -64,10 +64,10 @@ The following technologies were considered but excluded from testing for specifi
 
 | Framework | Location | Status | Notes |
 |-----------|----------|--------|-------|
-| Next.js | `nextjs_data_app/` | ✅ Implemented | React-based, TypeScript, SSR |
+| Next.js | `nextjs_data_app/` | ✅ Implemented | React-based, TypeScript, SSR, simpler setup |
 | Svelte | `webgis_svelte/` | ✅ Implemented | Lightweight, reactive |
 | Vue | `webgis_vue/` | ✅ Implemented | Progressive framework |
-| Angular | `angular_data_app/` | ✅ Implemented | Full-featured TypeScript framework |
+| Angular | `angular_data_app/` | ✅ Implemented | Full-featured, more setup steps required |
 | Flutter | - | 📋 Planned | See `FLUTTER.md` |
 
 ### Documentation
