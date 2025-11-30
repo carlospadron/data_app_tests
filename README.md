@@ -25,18 +25,10 @@ Test and compare different technology stacks for building data applications with
 - **Kotlin Multiplatform** - JVM-based multiplatform solution
 
 ### Data App Frameworks
-- **Streamlit** - Python-based data app framework
-- **Shiny** - R/Python framework for data apps
-- **Dash** - Python framework by Plotly
-- **Panel** - Python visualization framework
-- **Gradio** - ML-focused Python UI framework
-- **Reflex** - Python full-stack framework
-- **Taipy** - Python framework for data apps
-
-### Analytics & Visualization Platforms
-- **Observable** - JavaScript notebook platform
-- **Evidence** - Business intelligence framework
-- **Kepler.gl** - Geospatial data analysis tool
+- **Streamlit** - Python-based data app framework with simple API
+- **Dash** - Python framework by Plotly for analytical web apps
+- **Panel** - Python framework for creating custom interactive dashboards
+- **Reflex** - Python full-stack framework with React-like components
 
 ## Technologies Excluded from Testing
 
@@ -57,6 +49,12 @@ The following technologies were considered but excluded from testing for specifi
 - **Voilà** - Simply converts Jupyter notebooks to web apps; not a framework for building production data applications.
 - **Yew** - Rust WebAssembly framework adds unnecessary complexity for MapLibre GL integration compared to standard JavaScript frameworks.
 - **Quarto** - Technical publishing and documentation system, not designed for interactive applications.
+- **Gradio** - ML demo-focused framework with limited UI customization; too specialized for building rich spatial data applications.
+- **Shiny** - Primarily R-focused (Python support secondary); better alternatives exist for Python-based spatial apps.
+- **Taipy** - Newer framework with less mature ecosystem and limited MapLibre GL integration examples.
+- **Kepler.gl** - Visualization component/tool, not a framework for building custom applications. Designed for geospatial data exploration rather than building full data apps.
+- **Observable** - JavaScript notebook platform designed for data visualization and exploration, runs in browser only. Cannot write to databases without separate backend services. Better suited for prototyping than building full applications.
+- **Evidence** - BI reporting tool focused on reading and displaying data via markdown/SQL. Not designed for transactional operations or database writes. Lacks the interactive form components needed for data entry applications.
 
 ## Current Prototypes
 
@@ -120,28 +118,12 @@ npm install
 npm run dev
 
 # Svelte
-cd webgis_svelte
+cd svelte_data_app
 npm install
 npm run dev
 
 # Vue
-cd webgis_vue
-npm install
-npm run dev
-
-# Angular
-cd angular_data_app
-npm install
-ng serve
-```
-
-# Svelte
-cd webgis_svelte
-npm install
-npm run dev
-
-# Vue
-cd webgis_vue
+cd vue_data_app
 npm install
 npm run dev
 

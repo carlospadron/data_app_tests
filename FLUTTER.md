@@ -32,8 +32,8 @@ Create a new Flutter project through VS Code:
 Alternatively, use the command line:
 
 ```bash
-flutter create data_app_flutter
-cd data_app_flutter
+flutter create flutter_data_app
+cd flutter_data_app
 ```
 
 ### 3. Add MapLibre GL Dependency
