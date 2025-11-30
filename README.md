@@ -64,7 +64,7 @@ The following technologies were considered but excluded from testing for specifi
 
 | Framework | Location | Status | Notes |
 |-----------|----------|--------|-------|
-| Next.js | `webgis_nextjs/` | ✅ Implemented | React-based, TypeScript |
+| Next.js | `nextjs_data_app/` | ✅ Implemented | React-based, TypeScript, SSR |
 | Svelte | `webgis_svelte/` | ✅ Implemented | Lightweight, reactive |
 | Vue | `webgis_vue/` | ✅ Implemented | Progressive framework |
 | Angular | `angular_data_app/` | ✅ Implemented | Full-featured TypeScript framework |
@@ -74,7 +74,7 @@ The following technologies were considered but excluded from testing for specifi
 
 - `FLUTTER.md` - Flutter setup and integration guide
 - `ANGULAR.md` - Angular implementation guide with MapLibre GL
-- `NEXTJS.md` - Next.js implementation details
+- `NEXTJS.md` - Next.js comprehensive implementation guide
 - `SVELTE.md` - Svelte implementation guide
 - `VUE.md` - Vue.js implementation notes
 
@@ -103,9 +103,9 @@ The following technologies were considered but excluded from testing for specifi
 
 Each prototype has its own README with specific setup instructions:
 
-1. **Next.js**: See `webgis_nextjs/README.md`
-2. **Svelte**: See `webgis_svelte/README.md`
-3. **Vue**: See `webgis_vue/README.md`
+1. **Next.js**: See `NEXTJS.md`
+2. **Svelte**: See `SVELTE.md`
+3. **Vue**: See `VUE.md`
 4. **Angular**: See `ANGULAR.md`
 5. **Flutter**: See `FLUTTER.md`
 
@@ -113,9 +113,25 @@ Each prototype has its own README with specific setup instructions:
 
 ```bash
 # Next.js
-cd webgis_nextjs
+cd nextjs_data_app
 npm install
 npm run dev
+
+# Svelte
+cd webgis_svelte
+npm install
+npm run dev
+
+# Vue
+cd webgis_vue
+npm install
+npm run dev
+
+# Angular
+cd angular_data_app
+npm install
+ng serve
+```
 
 # Svelte
 cd webgis_svelte
