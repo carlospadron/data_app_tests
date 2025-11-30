@@ -62,12 +62,14 @@ The following technologies were considered but excluded from testing for specifi
 
 ### Web Framework Implementations
 
+**Note:** All web frameworks require foundational knowledge of HTML, CSS, and JavaScript/TypeScript. They also share common requirements including understanding of reactivity patterns, component lifecycle management, and API development for backend integration. The differences lie primarily in syntax, tooling, and architectural patterns.
+
 | Framework | Location | Status | Notes |
 |-----------|----------|--------|-------|
-| Next.js | `nextjs_data_app/` | ✅ Implemented | React-based, TypeScript, SSR, simpler setup |
-| Svelte | `webgis_svelte/` | ✅ Implemented | Lightweight, reactive |
-| Vue | `webgis_vue/` | ✅ Implemented | Progressive framework |
-| Angular | `angular_data_app/` | ✅ Implemented | Full-featured, more setup steps required |
+| Next.js | `nextjs_data_app/` | ✅ Implemented | **Easy:** Create files in `src/components/`, use 'use client' for interactivity. Excellent TypeScript support, built-in routing. Strong ecosystem for future features. |
+| Svelte | `svelte_data_app/` | ✅ Implemented | **Very Easy:** Create `.svelte` files in `src/lib/components/`. Minimal boilerplate, reactive by default. Svelte stores for state management. Clean, intuitive syntax for rapid development. |
+| Vue | `vue_data_app/` | ✅ Implemented | **Easy:** Create `.vue` files in `src/components/`. Composition API provides flexible reactivity. Good balance of simplicity and power for scaling applications. |
+| Angular | `angular_data_app/` | ✅ Implemented | **Moderate:** Use `ng generate component` CLI. More setup required (module imports, types). Enterprise-ready with comprehensive tooling. Best for large teams and complex apps. |
 | Flutter | - | 📋 Planned | See `FLUTTER.md` |
 
 ### Documentation
