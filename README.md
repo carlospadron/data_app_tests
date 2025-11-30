@@ -14,6 +14,12 @@ Test and compare different technology stacks for building data applications with
 
 ## Technology Categories
 
+### Web Frameworks
+- **Next.js** - React-based framework with SSR/SSG
+- **Svelte** - Lightweight reactive framework
+- **Vue** - Progressive JavaScript framework
+- **Angular** - Full-featured TypeScript framework
+
 ### Multi-Platform Frameworks
 - **Flutter** - Cross-platform framework using Dart
 - **Kotlin Multiplatform** - JVM-based multiplatform solution
@@ -32,8 +38,6 @@ Test and compare different technology stacks for building data applications with
 - **Evidence** - Business intelligence framework
 - **Kepler.gl** - Geospatial data analysis tool
 
-
-
 ## Technologies Excluded from Testing
 
 The following technologies were considered but excluded from testing for specific reasons:
@@ -51,7 +55,7 @@ The following technologies were considered but excluded from testing for specifi
 
 ### Limited Scope
 - **Voilà** - Simply converts Jupyter notebooks to web apps; not a framework for building production data applications.
-- **Yew** - WebAssembly framework adds unnecessary complexity for MapLibre GL integration compared to standard JavaScript frameworks.
+- **Yew** - Rust WebAssembly framework adds unnecessary complexity for MapLibre GL integration compared to standard JavaScript frameworks.
 - **Quarto** - Technical publishing and documentation system, not designed for interactive applications.
 
 ## Current Prototypes
