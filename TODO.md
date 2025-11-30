@@ -1,9 +1,0 @@
-- set local AWS cli to connect to s3
-- create script that uploads data to local postgresql instance
-- test script
-- prepare cicd for github
-- store image on github registry
-- set ecs
-- allow ecs to connect to s3
-- allow ecs to connect to password manager
-- test script in ecs
