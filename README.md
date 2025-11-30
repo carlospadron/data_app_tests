@@ -65,15 +65,15 @@ The following technologies were considered but excluded from testing for specifi
 | Framework | Location | Status | Notes |
 |-----------|----------|--------|-------|
 | Next.js | `webgis_nextjs/` | ✅ Implemented | React-based, TypeScript |
-| Next.js (Alt) | `webgis_nextjs_a/` | ✅ Implemented | Alternative implementation |
 | Svelte | `webgis_svelte/` | ✅ Implemented | Lightweight, reactive |
 | Vue | `webgis_vue/` | ✅ Implemented | Progressive framework |
+| Angular | `angular_data_app/` | ✅ Implemented | Full-featured TypeScript framework |
 | Flutter | - | 📋 Planned | See `FLUTTER.md` |
 
 ### Documentation
 
 - `FLUTTER.md` - Flutter setup and integration guide
-- `ANGULAR.md` - Angular implementation notes
+- `ANGULAR.md` - Angular implementation guide with MapLibre GL
 - `NEXTJS.md` - Next.js implementation details
 - `SVELTE.md` - Svelte implementation guide
 - `VUE.md` - Vue.js implementation notes
@@ -106,7 +106,8 @@ Each prototype has its own README with specific setup instructions:
 1. **Next.js**: See `webgis_nextjs/README.md`
 2. **Svelte**: See `webgis_svelte/README.md`
 3. **Vue**: See `webgis_vue/README.md`
-4. **Flutter**: See `FLUTTER.md`
+4. **Angular**: See `ANGULAR.md`
+5. **Flutter**: See `FLUTTER.md`
 
 ## Quick Start
 
@@ -125,6 +126,11 @@ npm run dev
 cd webgis_vue
 npm install
 npm run dev
+
+# Angular
+cd angular_data_app
+npm install
+ng serve
 ```
 
 ## Comparison Summary
@@ -152,6 +158,8 @@ See `LICENSE` file for details.
 
 - Complete Flutter implementation
 - Add Python-based frameworks (Streamlit, Dash, Panel)
-- Test performance benchmarks
+- Add Observable and Evidence implementations
+- Test performance benchmarks across frameworks
 - Document deployment strategies
+- Compare bundle sizes and load times
 - Add mobile platform tests
