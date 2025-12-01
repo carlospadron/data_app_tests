@@ -62,13 +62,13 @@ The following technologies were considered but excluded from testing for specifi
 
 **Note:** All web frameworks require foundational knowledge of HTML, CSS, and JavaScript/TypeScript. They also share common requirements including understanding of reactivity patterns, component lifecycle management, and API development for backend integration. The differences lie primarily in syntax, tooling, and architectural patterns.
 
-| Framework | Location | Status | Notes |
-|-----------|----------|--------|-------|
-| Next.js | `nextjs_data_app/` | ✅ Implemented | **Easy:** Create files in `src/components/`, use 'use client' for interactivity. Excellent TypeScript support, built-in routing. Strong ecosystem for future features. |
-| Svelte | `svelte_data_app/` | ✅ Implemented | **Very Easy:** Create `.svelte` files in `src/lib/components/`. Minimal boilerplate, reactive by default. Svelte stores for state management. Clean, intuitive syntax for rapid development. |
-| Vue | `vue_data_app/` | ✅ Implemented | **Easy:** Create `.vue` files in `src/components/`. Composition API provides flexible reactivity. Good balance of simplicity and power for scaling applications. |
-| Angular | `angular_data_app/` | ✅ Implemented | **Moderate:** Use `ng generate component` CLI. More setup required (module imports, types). Enterprise-ready with comprehensive tooling. Best for large teams and complex apps. |
-| Flutter | - | 📋 Planned | See `FLUTTER.md` |
+| Framework | Location | Status | Setup Steps | Notes |
+|-----------|----------|--------|-------------|-------|
+| Next.js | `nextjs_data_app/` | ✅ Implemented | 5 | **Easy:** Create files in `src/components/`, use 'use client' for interactivity. Excellent TypeScript support, built-in routing. Strong ecosystem for future features. |
+| Svelte | `svelte_data_app/` | ✅ Implemented | 4 | **Very Easy:** Create `.svelte` files in `src/lib/components/`. Minimal boilerplate, reactive by default. Svelte stores for state management. Clean, intuitive syntax for rapid development. |
+| Vue | `vue_data_app/` | ✅ Implemented | 5 | **Easy:** Create `.vue` files in `src/components/`. Composition API provides flexible reactivity. Good balance of simplicity and power for scaling applications. |
+| Angular | `angular_data_app/` | ✅ Implemented | 7 | **Moderate:** Use `ng generate component` CLI. More setup required (module imports, types). Enterprise-ready with comprehensive tooling. Best for large teams and complex apps. |
+| Flutter | `flutter_data_app/` | ✅ Implemented | 6 | **Moderate:** Multi-platform (Web, Android, iOS). Requires platform-specific configs (permissions, minSDK, web index.html). Dart language. Hot reload for fast iteration. Strong for mobile-first apps. |
 
 ### Documentation
 
