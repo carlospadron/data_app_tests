@@ -22,7 +22,6 @@ Test and compare different technology stacks for building data applications with
 
 ### Multi-Platform Frameworks
 - **Flutter** - Cross-platform framework using Dart
-- **Kotlin Multiplatform** - JVM-based multiplatform solution
 
 ### Data App Frameworks
 - **Streamlit** - Python-based data app framework with simple API
@@ -45,6 +44,9 @@ The following technologies were considered but excluded from testing for specifi
 ### Not Web-Focused
 - **Tauri** - Desktop and mobile only, no web deployment support which is a core requirement.
 
+### IDE-Specific Requirements
+- **Kotlin Multiplatform** - Requires IntelliJ IDEA or Android Studio for optimal development experience. While VS Code plugins exist, the tooling, debugging, and project setup heavily favor JetBrains IDEs, making it impractical for VS Code-centric workflows.
+
 ### Limited Scope
 - **Voilà** - Simply converts Jupyter notebooks to web apps; not a framework for building production data applications.
 - **Yew** - Rust WebAssembly framework adds unnecessary complexity for MapLibre GL integration compared to standard JavaScript frameworks.
@@ -58,17 +60,26 @@ The following technologies were considered but excluded from testing for specifi
 
 ## Current Prototypes
 
-### Web Framework Implementations
+### Web & Multi-Platform Framework Implementations
 
 **Note:** All web frameworks require foundational knowledge of HTML, CSS, and JavaScript/TypeScript. They also share common requirements including understanding of reactivity patterns, component lifecycle management, and API development for backend integration. The differences lie primarily in syntax, tooling, and architectural patterns.
 
+| Framework | Type | Location | Status | Setup Steps | Notes |
+|-----------|------|----------|--------|-------------|-------|
+| Next.js | Web | `nextjs_data_app/` | ✅ Implemented | 5 | **Easy:** Create files in `src/components/`, use 'use client' for interactivity. Excellent TypeScript support, built-in routing. Strong ecosystem for future features. |
+| Svelte | Web | `svelte_data_app/` | ✅ Implemented | 4 | **Very Easy:** Create `.svelte` files in `src/lib/components/`. Minimal boilerplate, reactive by default. Svelte stores for state management. Clean, intuitive syntax for rapid development. |
+| Vue | Web | `vue_data_app/` | ✅ Implemented | 5 | **Easy:** Create `.vue` files in `src/components/`. Composition API provides flexible reactivity. Good balance of simplicity and power for scaling applications. |
+| Angular | Web | `angular_data_app/` | ✅ Implemented | 7 | **Moderate:** Use `ng generate component` CLI. More setup required (module imports, types). Enterprise-ready with comprehensive tooling. Best for large teams and complex apps. |
+| Flutter | Multi-Platform | `flutter_data_app/` | ✅ Implemented | 6 | **Moderate:** Multi-platform (Web, Android, iOS). Requires platform-specific configs (permissions, minSDK, web index.html). Dart language. Hot reload for fast iteration. Strong for mobile-first apps. |
+
+### Python Data App Frameworks
+
 | Framework | Location | Status | Setup Steps | Notes |
 |-----------|----------|--------|-------------|-------|
-| Next.js | `nextjs_data_app/` | ✅ Implemented | 5 | **Easy:** Create files in `src/components/`, use 'use client' for interactivity. Excellent TypeScript support, built-in routing. Strong ecosystem for future features. |
-| Svelte | `svelte_data_app/` | ✅ Implemented | 4 | **Very Easy:** Create `.svelte` files in `src/lib/components/`. Minimal boilerplate, reactive by default. Svelte stores for state management. Clean, intuitive syntax for rapid development. |
-| Vue | `vue_data_app/` | ✅ Implemented | 5 | **Easy:** Create `.vue` files in `src/components/`. Composition API provides flexible reactivity. Good balance of simplicity and power for scaling applications. |
-| Angular | `angular_data_app/` | ✅ Implemented | 7 | **Moderate:** Use `ng generate component` CLI. More setup required (module imports, types). Enterprise-ready with comprehensive tooling. Best for large teams and complex apps. |
-| Flutter | `flutter_data_app/` | ✅ Implemented | 6 | **Moderate:** Multi-platform (Web, Android, iOS). Requires platform-specific configs (permissions, minSDK, web index.html). Dart language. Hot reload for fast iteration. Strong for mobile-first apps. |
+| Streamlit | - | 📋 Planned | TBD | Python-based, simple API for data apps |
+| Dash | - | 📋 Planned | TBD | Plotly-based analytical web apps |
+| Panel | - | 📋 Planned | TBD | Custom interactive dashboards |
+| Reflex | - | 📋 Planned | TBD | Full-stack Python with React-like components |
 
 ### Documentation
 
@@ -131,17 +142,12 @@ npm run dev
 cd angular_data_app
 npm install
 ng serve
+
+# Flutter
+cd flutter_data_app
+flutter pub get
+flutter run
 ```
-
-## Comparison Summary
-
-See `comparison_of_options.csv` for a detailed feature comparison including:
-- Framework category
-- Web deployment capability
-- Primary language
-- MapLibre compatibility level
-- Available UI frameworks
-- Additional notes and considerations
 
 ## Contributing
 
@@ -156,9 +162,7 @@ See `LICENSE` file for details.
 
 ## Next Steps
 
-- Complete Flutter implementation
 - Add Python-based frameworks (Streamlit, Dash, Panel)
-- Add Observable and Evidence implementations
 - Test performance benchmarks across frameworks
 - Document deployment strategies
 - Compare bundle sizes and load times
