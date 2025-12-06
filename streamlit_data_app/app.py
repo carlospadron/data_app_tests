@@ -22,12 +22,11 @@ view_state = pdk.ViewState(
 # PyDeck now uses MapLibre GL JS - no API keys required
 # Use built-in styles: 'light', 'dark', 'road', 'satellite'
 deck = pdk.Deck(
-    map_style='light',  # Built-in style
+    #map_style='light',  # Built-in style
+    map_style='https://demotiles.maplibre.org/style.json',  # Custom MapLibre style URL
     initial_view_state=view_state,
     layers=[],  # Add data layers here
 )
 
 # Display map in Streamlit
 st.pydeck_chart(deck)
-
-st.info("💡 PyDeck uses MapLibre GL JS - no API keys required!")

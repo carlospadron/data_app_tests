@@ -97,15 +97,14 @@ view_state = pdk.ViewState(
 # PyDeck now uses MapLibre GL JS - no API keys required
 # Use built-in styles: 'light', 'dark', 'road', 'satellite'
 deck = pdk.Deck(
-    map_style='light',  # Built-in style
+    #map_style='light',  # Built-in style
+    map_style='https://demotiles.maplibre.org/style.json',  # Custom MapLibre style URL
     initial_view_state=view_state,
     layers=[],  # Add data layers here
 )
 
 # Display map in Streamlit
 st.pydeck_chart(deck)
-
-st.info("💡 PyDeck uses MapLibre GL JS - no API keys required!")
 ```
 
 ## Alternative: Using Streamlit-Folium
@@ -160,42 +159,6 @@ st_data = st_folium(m, width=1200, height=600)
 # Display clicked location
 if st_data['last_clicked']:
     st.write(f"Last clicked coordinates: {st_data['last_clicked']}")
-```
-
-## Alternative: Using PyDeck with Mapbox Tiles
-
-Create `app_pydeck.py`:
-
-```python
-import streamlit as st
-import pydeck as pdk
-
-st.set_page_config(
-    page_title="Streamlit Data App - PyDeck",
-    layout="wide"
-)
-
-st.title("Streamlit Data App with PyDeck")
-
-# Define initial view state
-view_state = pdk.ViewState(
-    latitude=0,
-    longitude=0,
-    zoom=2,
-    pitch=0,
-)
-
-# Create PyDeck map with MapLibre style
-# PyDeck now uses MapLibre GL JS - no API keys required
-r = pdk.Deck(
-    map_style='light',  # Use built-in styles: 'light', 'dark', 'road', 'satellite'
-    initial_view_state=view_state,
-    layers=[],  # Add data layers here
-)
-
-st.pydeck_chart(r)
-
-st.info("💡 PyDeck uses MapLibre GL JS - no API keys required!")
 ```
 
 ## Alternative: Using Plotly with Mapbox
