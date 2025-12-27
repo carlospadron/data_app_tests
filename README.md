@@ -153,6 +153,8 @@ flutter run
 
 This is a testing and evaluation repository. Each prototype demonstrates:
 - Basic MapLibre GL map integration
+- Two GeoJSON layers (sample regions and points of interest)
+- Layer toggle menu for individual layer control
 - Interactive navigation components
 - Framework-specific best practices
 

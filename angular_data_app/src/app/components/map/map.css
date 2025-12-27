@@ -2,3 +2,37 @@
   width: 100%;
   height: 100vh;
 }
+
+.layer-control {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: white;
+  padding: 15px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  z-index: 1;
+  min-width: 200px;
+}
+
+.layer-control h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.layer-item {
+  margin: 8px 0;
+}
+
+.layer-item label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.layer-item input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}

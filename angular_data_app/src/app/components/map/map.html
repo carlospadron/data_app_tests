@@ -1,1 +1,25 @@
 <div id="map"></div>
+
+<div class="layer-control">
+  <h3>Layers</h3>
+  <div class="layer-item">
+    <label>
+      <input 
+        type="checkbox" 
+        [checked]="regionsVisible" 
+        (change)="toggleRegions()"
+      />
+      Regions
+    </label>
+  </div>
+  <div class="layer-item">
+    <label>
+      <input 
+        type="checkbox" 
+        [checked]="pointsVisible" 
+        (change)="togglePoints()"
+      />
+      Points of Interest
+    </label>
+  </div>
+</div>

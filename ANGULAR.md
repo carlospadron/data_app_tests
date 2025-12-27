@@ -152,6 +152,24 @@ angular_data_app/
 └── package.json
 ```
 
+## Features Implemented
+
+### GeoJSON Layers
+
+The application includes two GeoJSON layers:
+
+1. **Regions Layer** - Displays polygon regions with properties like name and population
+2. **Points of Interest Layer** - Shows point markers for cities and landmarks
+
+### Layer Toggle Menu
+
+A control panel in the top-left corner allows users to:
+- Toggle each layer on/off independently
+- See which layers are currently visible
+- Control layer visibility in real-time
+
+The implementation uses Angular's reactive state management with `regionsVisible` and `pointsVisible` properties to control layer visibility.
+
 ## Additional Features
 
 ### Add a Map Service
@@ -162,9 +180,9 @@ Create a service to manage map-related functionality:
 ng generate service services/map
 ```
 
-### Add Markers
+### Add More Markers
 
-To add markers to your map, update `map.component.ts`:
+To add additional markers to your map, update `map.component.ts`:
 
 ```typescript
 // Add after map initialization
