@@ -26,7 +26,6 @@ Test and compare different technology stacks for building data applications with
 ### Data App Frameworks
 - **Streamlit** - Python-based data app framework with simple API
 - **Dash** - Python framework by Plotly for analytical web apps
-- **Panel** - Python framework for creating custom interactive dashboards
 - **Reflex** - Python full-stack framework with React-like components
 
 ## Technologies Excluded from Testing
@@ -54,6 +53,7 @@ The following technologies were considered but excluded from testing for specifi
 - **Gradio** - ML demo-focused framework with limited UI customization; too specialized for building rich spatial data applications.
 - **Shiny** - Primarily R-focused (Python support secondary); better alternatives exist for Python-based spatial apps.
 - **Taipy** - Newer framework with less mature ecosystem and limited MapLibre GL integration examples.
+- **Panel** - Similar to Streamlit but less mature ecosystem. Streamlit and Dash already provide comprehensive Python data app coverage for different use cases (rapid prototyping vs. custom dashboards).
 - **Kepler.gl** - Visualization component/tool, not a framework for building custom applications. Designed for geospatial data exploration rather than building full data apps.
 - **Observable** - JavaScript notebook platform designed for data visualization and exploration, runs in browser only. Cannot write to databases without separate backend services. Better suited for prototyping than building full applications.
 - **Evidence** - BI reporting tool focused on reading and displaying data via markdown/SQL. Not designed for transactional operations or database writes. Lacks the interactive form components needed for data entry applications.
@@ -78,7 +78,6 @@ The following technologies were considered but excluded from testing for specifi
 |-----------|----------|--------|-------------|-------|
 | Streamlit | `streamlit_data_app/` | ✅ Implemented | 3 | **Very Easy:** PyDeck built-in, uses MapLibre GL JS natively. Reactive by default. Sidebar controls auto-refresh. Viewport state preserved across reruns. Perfect for rapid prototyping. |
 | Dash | `dash_data_app/` | ✅ Implemented | 3 | **Easy:** Plotly-based with MapLibre GL JS rendering. Callback system for reactivity. More layout control than Streamlit. Good for custom dashboards. |
-| Panel | - | ⏸️ Paused | - | Similar to Streamlit but less mature ecosystem |
 | Reflex | - | ⏸️ Paused | - | Full-stack Python, but more complex than needed for this use case |
 
 ### Documentation
