@@ -46,11 +46,29 @@ flutter pub add maplibre_gl
 
 This will add the package to your `pubspec.yaml` and download dependencies.
 
+## Features Implemented
+
+### GeoJSON Layers
+
+The application includes two GeoJSON layers:
+
+1. **Regions Layer** - Polygon regions with fill and outline styling
+2. **Points of Interest Layer** - Circle markers representing cities
+
+### Layer Toggle Menu
+
+A floating control panel in the top-left corner provides:
+- Checkboxes to toggle each layer independently
+- Material Design styling with proper shadows and spacing
+- Real-time layer visibility updates using Flutter's state management
+
+The implementation uses `StatefulWidget` with `regionsVisible` and `pointsVisible` state variables to manage layer visibility through the MapLibre controller.
+
 ## Configure Map Component
 
 ### 1. Update main.dart
 
-Replace the content in `lib/main.dart` with a basic map setup:
+The `lib/main.dart` file includes a complete implementation with GeoJSON layers and toggle controls:
 
 ```dart
 import 'package:flutter/material.dart';
