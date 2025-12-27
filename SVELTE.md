@@ -79,24 +79,48 @@ Alternatively, you can import it in your root layout. Create or update `src/rout
 <slot />
 ```
 
+## Features Implemented
+
+### GeoJSON Layers
+
+The Map component includes two GeoJSON layers:
+
+1. **Regions Layer** - Polygon features with customizable styling
+2. **Points of Interest Layer** - Circle markers for locations
+
+### Layer Toggle Menu
+
+An interactive control panel provides:
+- Checkboxes bound to reactive variables
+- Individual layer visibility control
+- Svelte's reactive system for automatic UI updates
+
+Implementation uses:
+- Reactive variables (`regionsVisible`, `pointsVisible`)
+- `bind:checked` directive for two-way binding
+- Toggle functions that update layer visibility
+
 ## Create a Map Component
 
-Create `src/lib/components/Map.svelte`:
+The `src/lib/components/Map.svelte` file includes the complete implementation:
 
 ```svelte
 <script>
 	import { onMount, onDestroy } from 'svelte';
 	import maplibregl from 'maplibre-gl';
 
+	// Sample GeoJSON data included
 	let mapContainer;
 	let map;
+	let regionsVisible = true;
+	let pointsVisible = true;
 
 	onMount(() => {
 		map = new maplibregl.Map({
 			container: mapContainer,
 			style: 'https://demotiles.maplibre.org/style.json',
-			center: [0, 0],
-			zoom: 2
+			center: [15, 35],
+			zoom: 3
 		});
 
 		// Add navigation controls
