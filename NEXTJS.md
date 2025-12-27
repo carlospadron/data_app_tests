@@ -136,6 +136,29 @@ nextjs_data_app/
 └── tsconfig.json
 ```
 
+## Features Implemented
+
+### GeoJSON Layers
+
+The Map component includes two GeoJSON layers:
+
+1. **Regions Layer** - Polygon features with fill and outline rendering
+2. **Points of Interest Layer** - Circle markers for cities
+
+Data is defined as JavaScript objects and added to the map as GeoJSON sources.
+
+### Layer Toggle Menu
+
+An overlay control panel provides:
+- Individual checkboxes for each layer
+- Real-time visibility toggling
+- Clean styling with shadows and proper spacing
+
+Implemented using React hooks:
+- `useState` for managing `regionsVisible` and `pointsVisible` state
+- `useRef` to maintain map instance across renders
+- `useEffect` for map initialization and layer setup
+
 ## Additional Features
 
 ### Add a Navigation Component
