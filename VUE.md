@@ -73,27 +73,51 @@ import App from './App.vue'
 createApp(App).mount('#app')
 ```
 
+## Features Implemented
+
+### GeoJSON Layers
+
+The Map component includes two GeoJSON layers:
+
+1. **Regions Layer** - Polygon geometries with fill and outline
+2. **Points of Interest Layer** - Circle markers with custom styling
+
+### Layer Toggle Menu
+
+A control panel overlay provides:
+- Vue reactive checkboxes for layer control
+- Two-way data binding with `v-model`
+- Real-time visibility updates
+
+Implementation uses Vue 3 Composition API:
+- `ref()` for reactive state management
+- `v-model` for checkbox binding
+- Toggle functions with computed visibility values
+
 ## Create a Map Component
 
-Create `src/components/Map.vue`:
+The `src/components/Map.vue` file includes the complete implementation:
 
 ```vue
 <script setup>
 import { onMounted, onUnmounted, ref } from 'vue';
 import maplibregl from 'maplibre-gl';
 
+// Sample GeoJSON data included
 const mapContainer = ref(null);
+const regionsVisible = ref(true);
+const pointsVisible = ref(true);
 let map = null;
 
 onMounted(() => {
   map = new maplibregl.Map({
     container: mapContainer.value,
     style: 'https://demotiles.maplibre.org/style.json',
-    center: [0, 0],
-    zoom: 2
+    center: [15, 35],
+    zoom: 3
   });
 
-  // Add navigation controls
+  // Add navigation controls and GeoJSON layers
   map.addControl(new maplibregl.NavigationControl(), 'top-right');
 });
 
