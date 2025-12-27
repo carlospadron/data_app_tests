@@ -42,29 +42,16 @@ Install Streamlit and mapping dependencies using uv:
 uv add streamlit
 ```
 
-## Mapping Options for Streamlit
+## MapLibre GL Integration with PyDeck
 
-Streamlit doesn't have native MapLibre GL support, but several libraries work well for interactive maps with custom vector tile backgrounds:
+Streamlit includes [PyDeck](https://deckgl.readthedocs.io/) via `st.pydeck_chart`, which provides high-performance WebGL-powered visualizations using **MapLibre GL JS** for rendering. 
 
-### Option 1: PyDeck - Built-in (Recommended)
-
-[PyDeck](https://deckgl.readthedocs.io/) is built into Streamlit via `st.pydeck_chart`. It provides high-performance WebGL-powered visualizations using MapLibre GL JS for rendering. **No additional installation or API keys required.**
-
-### Option 2: Streamlit-Folium (Best for Vector Tiles)
-
-[Folium](https://python-visualization.github.io/folium/) with the [streamlit-folium](https://github.com/randyzwitch/streamlit-folium) component supports custom tile layers including Mapbox Vector Tiles.
-
-```bash
-uv add streamlit-folium folium
-```
-
-### Option 3: Plotly
-
-[Plotly](https://plotly.com/python/maps/) supports Mapbox maps with custom styles and vector tiles.
-
-```bash
-uv add plotly
-```
+**Key advantages:**
+- Built into Streamlit (no additional dependencies)
+- Uses MapLibre GL JS natively (no API keys required)
+- High-performance rendering with WebGL
+- Perfect for GeoJSON and vector data visualization
+- Supports custom MapLibre styles
 
 ## Features Implemented
 
@@ -87,11 +74,11 @@ Implementation approach:
 - Conditional layer creation based on checkbox state
 - Streamlit's reactive programming model handles UI updates automatically
 
-## Create a Basic Map with PyDeck (Built-in)
+## Create the Map Application
 
 ### Create app.py
 
-The main application file `app.py` includes layers and controls:
+The main application file `app.py` with GeoJSON layers and controls:
 
 ```python
 import streamlit as st
@@ -143,136 +130,67 @@ deck = pdk.Deck(
 st.pydeck_chart(deck)
 ```
 
-## Alternative: Using Streamlit-Folium
+## Resources
 
-If you need custom Mapbox Vector Tiles without an API key, use Folium. Create `app_folium.py`:
-
-```python
-import streamlit as st
-import folium
-from streamlit_folium import st_folium
-
-# Page configuration
-st.set_page_config(
-    page_title="Streamlit Data App",
-    page_icon="🗺️",
-    layout="wide"
-)
-
-st.title("Streamlit Data App with Interactive Map")
-
-# Create a folium map with custom vector tiles
-# Using MapLibre demo tiles as base
-m = folium.Map(
-    location=[0, 0],
-    zoom_start=2,
-    tiles=None,  # Don't use default tiles
-)
-
-# Add MapLibre/Mapbox vector tile layer
-folium.TileLayer(
-    tiles='https://demotiles.maplibre.org/tiles/{z}/{x}/{y}.pbf',
-    attr='MapLibre',
-    name='MapLibre Demo',
-    overlay=False,
-    control=True,
-    show=True,
-).add_to(m)
-
-# Alternative: Use Mapbox style URL if you have an access token
-# folium.TileLayer(
-#     tiles='https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=YOUR_TOKEN',
-#     attr='Mapbox',
-#     name='Mapbox Streets',
-# ).add_to(m)
-
-# Add layer control
-folium.LayerControl().add_to(m)
-
-# Display map in Streamlit
-st_data = st_folium(m, width=1200, height=600)
-
-# Display clicked location
-if st_data['last_clicked']:
-    st.write(f"Last clicked coordinates: {st_data['last_clicked']}")
-```
-
-## Alternative: Using Plotly with Mapbox
-
-Create `app_plotly.py`:
-
-```python
-import streamlit as st
-import plotly.express as px
-import plotly.graph_objects as go
-
-st.set_page_config(
-    page_title="Streamlit Data App - Plotly",
-    layout="wide"
-)
-
-st.title("Streamlit Data App with Plotly")
-
-# Create Plotly map with Mapbox
-fig = go.Figure(go.Scattermapbox(
-    mode='markers',
-    lon=[0],
-    lat=[0],
-    marker={'size': 10}
-))
-
-fig.update_layout(
-    mapbox={
-        'style': "open-street-map",  # or use custom Mapbox style with token
-        'center': {'lon': 0, 'lat': 0},
-        'zoom': 2
-    },
-    margin={'l': 0, 'r': 0, 'b': 0, 't': 0},
-    height=600
-)
-
-st.plotly_chart(fig, use_container_width=True)
-
-st.info("💡 For custom Mapbox styles, set mapbox.accesstoken in layout")
-```
+- [Streamlit Documentation](https://docs.streamlit.io)
+- [PyDeck Documentation](https://deckgl.readthedocs.io/)
+- [MapLibre GL JS](https://maplibre.org/maplibre-gl-js/docs/)
+- [uv Documentation](https://github.com/astral-sh/uv)
 
 ## Run the Application
 
 Start the Streamlit development server:
 
 ```bash
-uv run treamlit run app.py
+uv run streamlit run app.py
 ```
 
 The app will open in your browser at `http://localhost:8501`
+
+## Map State Preservation
+
+Streamlit automatically preserves map viewport state (zoom, pan) between script reruns:
+- User interactions persist even when layer toggles trigger reruns
+- Only explicit changes to `initial_view_state` reset the map
+- This is built into Streamlit's component state management (v1.12+)
 
 ## Project Structure
 
 ```
 streamlit_data_app/
 ├── app.py              # Main application file
-├── pyproject.toml      # Project metadata and dependencies (managed by uv)
-├── uv.lock            # Locked dependencies (managed by uv)
-└── .venv/             # Virtual environment (not in git)
-```
-
-## Additional Features
-
-### Add Markers to the Map
-
-Update `app.py` to add markers:
+├── pyproore GeoJSON Layers
 
 ```python
-import folium
-from folium import Marker, Popup
+# Add another layer
+polygon_layer = pdk.Layer(
+    "GeoJsonLayer",
+    your_geojson_data,
+    opacity=0.8,
+    stroked=True,
+    filled=True,
+    extruded=True,
+    get_elevation='properties.height',
+    get_fill_color=[255, 140, 0],
+    get_line_color=[255, 255, 255],
+)
 
-# Add markers
-folium.Marker(
-    location=[51.5074, -0.1278],
-    popup=Popup("London", show=True),
-    tooltip="London",
-    icon=folium.Icon(color='red', icon='info-sign')
-).add_to(m)
+layers.append(polygon_layer)
+```
+
+### Add Interactive Tooltips
+
+```python
+deck = pdk.Deck(
+    map_style='https://demotiles.maplibre.org/style.json',
+    initial_view_state=view_state,
+    layers=layers,
+    tooltip={
+        "html": "<b>Name:</b> {name}<br/><b>Type:</b> {type}<br/><b>Population:</b> {population}",
+        "style": {"backgroundColor": "steelblue", "color": "white"}
+    }
+)
+```
 
 folium.Marker(
     location=[40.7128, -74.0060],
@@ -285,44 +203,14 @@ folium.Marker(
 ### Add Sidebar Controls
 
 ```python
-# Add sidebar
-with st.sidebar:
-    st.header("Map Controls")
-    
-    zoom_level = st.slider("Zoom Level", 1, 18, 2)
-    
-    center_lat = st.number_input("Center Latitude", -90.0, 90.0, 0.0)
-    center_lon = st.number_input("Center Longitude", -180.0, 180.0, 0.0)
-    
-    if st.button("Update Map"):
-        m = folium.Map(
-            location=[center_lat, center_lon],
-            zoom_start=zoom_level,
-        )
-        # Add your tile layers and markers here
-```
-
-### Display Data Alongside Map
+# Add sidebarTables
 
 ```python
 import pandas as pd
 
-# Create sample data
-data = pd.DataFrame({
-    'City': ['London', 'New York', 'Tokyo'],
-    'Latitude': [51.5074, 40.7128, 35.6762],
-    'Longitude': [-0.1278, -74.0060, 139.6503],
-    'Population': [9000000, 8400000, 14000000]
-})
-
-# Display data table
-st.subheader("City Data")
-st.dataframe(data)
-
-# Add markers from dataframe
-for idx, row in data.iterrows():
-    folium.Marker(
-        location=[row['Latitude'], row['Longitude']],
+# Create dataframe from layer data
+data = pd.DataFrame(points_data)
+st.sidebar.dataframe(datacation=[row['Latitude'], row['Longitude']],
         popup=f"{row['City']}<br>Pop: {row['Population']:,}",
         tooltip=row['City']
     ).add_to(m)
@@ -364,25 +252,16 @@ uv add streamlit pydeck pandas
 To export dependencies for compatibility:
 ```bash
 uv pip compile pyproject.toml -o requirements.txt
-```
+```:
 
-## Deployment
+```bash
+# Install from existing project
+uv sync
 
-### Streamlit Community Cloud
+# Add new packages
+uv add streamlit pydeck pandas
 
-1. Push your code to GitHub
-2. Go to [share.streamlit.io](https://share.streamlit.io)
-3. Connect your repository
-4. Deploy
-
-### Docker
-
-Create `Dockerfile`:
-
-```dockerfile
-FROM python:3.11-slim
-
-WORKDIR /app
+# Export for compatibility /app
 
 COPY requirements.txt .
 RUN pip install -r requirements.txt
