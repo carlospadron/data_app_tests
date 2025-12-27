@@ -76,39 +76,96 @@ The following technologies were considered but excluded from testing for specifi
 
 | Framework | Location | Status | Setup Steps | Notes |
 |-----------|----------|--------|-------------|-------|
-| Streamlit | - | 📋 Planned | TBD | Python-based, simple API for data apps |
-| Dash | - | 📋 Planned | TBD | Plotly-based analytical web apps |
-| Panel | - | 📋 Planned | TBD | Custom interactive dashboards |
-| Reflex | - | 📋 Planned | TBD | Full-stack Python with React-like components |
+| Streamlit | `streamlit_data_app/` | ✅ Implemented | 3 | **Very Easy:** PyDeck built-in, uses MapLibre GL JS natively. Reactive by default. Sidebar controls auto-refresh. Viewport state preserved across reruns. Perfect for rapid prototyping. |
+| Dash | `dash_data_app/` | ✅ Implemented | 3 | **Easy:** Plotly-based with MapLibre GL JS rendering. Callback system for reactivity. More layout control than Streamlit. Good for custom dashboards. |
+| Panel | - | ⏸️ Paused | - | Similar to Streamlit but less mature ecosystem |
+| Reflex | - | ⏸️ Paused | - | Full-stack Python, but more complex than needed for this use case |
 
 ### Documentation
 
-- `FLUTTER.md` - Flutter setup and integration guide
 - `ANGULAR.md` - Angular implementation guide with MapLibre GL
+- `DASH.md` - Dash with Plotly/Mapbox implementation guide
+- `FLUTTER.md` - Flutter setup and integration guide
 - `NEXTJS.md` - Next.js comprehensive implementation guide
+- `STREAMLIT.md` - Streamlit with PyDeck implementation guide
 - `SVELTE.md` - Svelte implementation guide
 - `VUE.md` - Vue.js implementation notes
 
-## Evaluation Criteria
+## Evaluation Results
 
-### MapLibre GL Compatibility
-- **High** - Native JavaScript integration, straightforward
-- **Medium** - Works but requires adapters or workarounds
-- **Low** - Limited or no direct support
+### MapLibre GL Integration Comparison
 
-### Web Deployment
-- Can the framework deploy to web browsers?
-- Hosting options (static, SSR, edge functions)
+| Framework | MapLibre Compatibility | Integration Method | Difficulty | GeoJSON Support |
+|-----------|----------------------|-------------------|------------|----------------|
+| Next.js | ⭐⭐⭐ High | Direct JS library import | Easy | Excellent |
+| Svelte | ⭐⭐⭐ High | Direct JS library import | Very Easy | Excellent |
+| Vue | ⭐⭐⭐ High | Direct JS library import | Easy | Excellent |
+| Angular | ⭐⭐⭐ High | Direct JS library import | Moderate | Excellent |
+| Flutter | ⭐⭐ Medium | maplibre_gl package | Moderate | Good (requires JSON parsing) |
+| Streamlit | ⭐⭐⭐ High | PyDeck (MapLibre GL JS) | Very Easy | Excellent |
+| Dash | ⭐⭐⭐ High | Plotly (MapLibre GL JS) | Easy | Excellent |
 
-### Language & Ecosystem
-- Primary programming language
-- Available libraries and community support
-- Learning curve and developer experience
+### Development Experience
 
-### UI Frameworks
-- Built-in component libraries
-- Customization capabilities
-- Design system support
+| Framework | Setup Time | Learning Curve | Hot Reload | State Management | Code Verbosity |
+|-----------|-----------|---------------|------------|------------------|----------------|
+| Svelte | ~5 min | Low | ⚡ Instant | Reactive variables | Minimal |
+| Next.js | ~8 min | Low-Medium | ⚡ Fast | React hooks | Low |
+| Vue | ~8 min | Low-Medium | ⚡ Fast | Composition API | Low |
+| Dash | ~5 min | Medium | 🔄 Moderate | Callbacks | Low-Medium |
+| Streamlit | ~3 min | Very Low | ⚡ Fast | Auto-refresh | Minimal |
+| Angular | ~15 min | Medium-High | 🔄 Moderate | Services/Signals | High |
+| Flutter | ~10 min | Medium | ⚡ Fast | StatefulWidget | Medium |
+
+### Layer Toggle Implementation Complexity
+
+| Framework | Lines of Code | Implementation Notes |
+|-Dash | ~95 | Plotly traces, callback decorator, checklist component |
+| ----------|--------------|---------------------|
+| Streamlit | ~60 | Conditional layer creation in Python, sidebar checkboxes |
+| Svelte | ~160 | Reactive variables with bind:checked, simple toggle functions |
+| Vue | ~165 | Composition API with refs, v-model binding |
+| Next.js | ~185 | React hooks, inline styles |
+| Angular | ~190 | TypeScript class, template with property binding |
+| Flutter | ~200 | StatefulWidget with async layer visibility methods |
+
+### Deployment Options
+
+| Framework | Static Export | SSR/SSG | Container | Edge Functions | Ease of Deployment |
+|-----------|--------------|---------|-----------|----------------|-------------------|
+| Next.js | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Vercel | ⭐⭐⭐ Excellent |
+| Svelte | ✅ Yes | ✅ Yes (SvelteKit) | ✅ Yes | ✅ Vercel/Netlify | ⭐⭐⭐ Excellent |
+| Vue | ✅ Yes | ✅ Yes (Nuxt) | ✅ Yes | ✅ Vercel/Netlify | ⭐⭐⭐ Excellent |
+| Dash | ❌ No | ❌ No | ✅ Yes | ❌ No | ⭐⭐ Good (Cloud/Docker) |
+| Angular | ✅ Yes | ✅ Yes (Universal) | ✅ Yes | ⚠️ Limited | ⭐⭐ Good |
+| Streamlit | ❌ No | ❌ No | ✅ Yes | ❌ No | ⭐⭐ Good (Cloud/Docker) |
+| Flutter | ✅ Web only | ❌ No | ✅ Yes | ❌ No | ⭐ Fair |
+
+### Key Findings
+
+#### Best for Rapid Prototyping
+1. **Streamlit** - Python-based, 3-minute setup, 60 lines, easiest overall
+2. **Dash** - Python-based, 95 lines, good for Python developers who need more layout control
+3. **Svelte** - JavaScript-based, minimal boilerplate, very intuitive for JS developers
+4. **Vue** - JavaScript-based, clean syntax, good documentation
+
+#### Best for Production Web Apps
+1. **Next.js** - Full-featured, excellent ecosystem, strong deployment options
+2. **Svelte** - Great performance, clean code, growing ecosystem
+3. **Vue** - Mature, flexible, good balance of features
+
+#### Best for Cross-Platform
+1. **Flutter** - True multi-platform (Web/iOS/Android), but web performance varies
+
+#### Best for Enterprise
+1. **Angular** - Comprehensive tooling, strong typing, established patterns
+2. **Next.js** - Strong ecosystem, great developer experience
+
+#### MapLibre GL Integration Winner
+**Tie: All frameworks except Flutter** - JavaScript frameworks (Svelte, Next.js, Vue, Angular) and Python frameworks (Streamlit, Dash) all have excellent native MapLibre GL JS integration. Flutter has medium compatibility requiring a package wrapper.
+
+#### Simplest Implementation
+**Streamlit** - 60 lines of Python, built-in PyDeck with MapLibre GL JS, automatic state management.
 
 ## Getting Started
 
@@ -119,6 +176,8 @@ Each prototype has its own README with specific setup instructions:
 3. **Vue**: See `VUE.md`
 4. **Angular**: See `ANGULAR.md`
 5. **Flutter**: See `FLUTTER.md`
+6. **Streamlit**: See `STREAMLIT.md`
+7. **Dash**: See `DASH.md`
 
 ## Quick Start
 
@@ -143,10 +202,21 @@ cd angular_data_app
 npm install
 ng serve
 
-# Flutter
+# Flutter (Web)
 cd flutter_data_app
 flutter pub get
-flutter run
+flutter run -d chrome
+
+# Streamlit
+cd streamlit_data_app
+uv sync
+uv run streamlit run app.py
+
+# Dash
+cd dash_data_app
+uv sync
+uv run python app.py
+
 ```
 
 ## Contributing
@@ -159,13 +229,42 @@ This is a testing and evaluation repository. Each prototype demonstrates:
 - Framework-specific best practices
 
 ## License
-
 See `LICENSE` file for details.
 
-## Next Steps
+## Conclusions
 
-- Add Python-based frameworks (Streamlit, Dash, Panel)
-- Test performance benchmarks across frameworks
-- Document deployment strategies
-- Compare bundle sizes and load times
-- Add mobile platform tests
+### Recommended Framework by Use Case
+
+**For Python Developers:**
+- **Quick Prototyping**: Streamlit (simplest, 60 lines, automatic state management)
+- **Custom Dashboards**: Dash (more layout control, 95 lines, callback-based reactivity)
+
+**For JavaScript Developers:**
+- **Rapid Development**: Svelte (minimal boilerplate, very intuitive)
+- **Modern Web Apps**: Next.js or Svelte (excellent DX, strong deployment)
+- **Enterprise Applications**: Angular or Next.js (comprehensive tooling)
+- **Team Flexibility**: Vue (good balance, easy to learn)
+
+**For Multi-Platform:**
+- **Mobile + Web**: Flutter (with caveats on web performance)
+
+### MapLibre GL Integration Success
+
+All tested frameworks successfully integrate with MapLibre GL:
+- **JavaScript frameworks** (Svelte, Next.js, Vue, Angular) have native, straightforward integration
+- **Python frameworks** (Streamlit via PyDeck, Dash via Plotly) use MapLibre GL JS natively
+- **Flutter** requires a package but works well across platforms
+
+**Note:** Plotly switched from Mapbox GL JS to MapLibre GL JS, eliminating the need for API tokens.
+
+### Performance & Bundle Size
+
+*(To be added: Detailed performance benchmarks)*
+
+## Future Work
+
+- Performance benchmarks (load time, FPS, memory usage)
+- Bundle size comparisons
+- Production deployment examples for each framework
+- Advanced MapLibre GL features (3D, clustering, custom styles)
+- Backend integration patterns
