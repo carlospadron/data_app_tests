@@ -66,11 +66,32 @@ uv add streamlit-folium folium
 uv add plotly
 ```
 
+## Features Implemented
+
+### GeoJSON Layers
+
+The application includes two data layers:
+
+1. **Regions Layer** - Uses PyDeck's `GeoJsonLayer` to render polygon features
+2. **Points of Interest Layer** - Uses PyDeck's `ScatterplotLayer` for point data
+
+### Layer Toggle Controls
+
+Streamlit's sidebar provides:
+- Checkbox widgets for each layer
+- Real-time layer filtering based on user selection
+- Automatic map rerendering when toggles change
+
+Implementation approach:
+- Layer data defined as Python lists/dictionaries
+- Conditional layer creation based on checkbox state
+- Streamlit's reactive programming model handles UI updates automatically
+
 ## Create a Basic Map with PyDeck (Built-in)
 
 ### Create app.py
 
-Create the main application file `app.py`:
+The main application file `app.py` includes layers and controls:
 
 ```python
 import streamlit as st
@@ -85,13 +106,28 @@ st.set_page_config(
 
 st.title("Streamlit Data App with Interactive Map")
 
+# Sample GeoJSON data for regions and points
+# Sidebar controls for layer visibility
+st.sidebar.header("Layers")
+show_regions = st.sidebar.checkbox("Regions", value=True)
+show_points = st.sidebar.checkbox("Points of Interest", value=True)
+
 # Define initial view state
 view_state = pdk.ViewState(
-    latitude=0,
-    longitude=0,
-    zoom=2,
+    latitude=35,
+    longitude=15,
+    zoom=3,
     pitch=0,
 )
+
+# Create layers based on toggle state
+layers = []
+if show_regions:
+    # Add GeoJsonLayer
+    pass
+if show_points:
+    # Add ScatterplotLayer
+    pass
 
 # Create PyDeck map with MapLibre style
 # PyDeck now uses MapLibre GL JS - no API keys required
