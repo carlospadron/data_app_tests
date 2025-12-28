@@ -240,9 +240,56 @@ This is a testing and evaluation repository. Each prototype demonstrates:
 
 ## License
 See `LICENSE` file for details.
+Performance & Bundle Size
+(To be added: Detailed performance benchmarks)
 
+Future Work
+Performance benchmarks (load time, FPS, memory usage)
+Bundle size comparisons
+Production deployment examples for each framework
+Advanced MapLibre GL features (3D, clustering, custom styles)
+Backend integration patterns
 - **Full-Stack Apps**: Reflex (pure Python with React performance, 170 lines, state-based)
 ## Conclusions
+
+### When Do You Actually Need JavaScript Web Frameworks?
+
+**⚠️ Important:** For most data applications with modest user loads (<200 users), Python frameworks (Streamlit, Dash) are sufficient and significantly simpler.
+
+**Stick with Python Frameworks (Streamlit/Dash) if:**
+- User base: <200 concurrent users
+- Use case: Internal tools, dashboards, data exploration
+- UI needs: Standard controls, charts, maps are sufficient
+- Team: Python developers who want to stay in Python
+- Priority: Fast development and maintenance
+
+**Consider JavaScript Frameworks (Next.js/Svelte/Vue) when:**
+- **Complex UI Requirements:**
+  - Heavy real-time collaboration (multiple users editing simultaneously)
+  - Complex drag-and-drop interactions
+  - Custom animations and transitions
+  - Offline-first applications
+  - Very custom UI/UX not achievable with standard components
+
+- **High Traffic/Performance Needs:**
+  - Thousands of concurrent users
+  - Need for static site generation (SSG) for performance
+  - Edge deployment requirements
+  - Mobile app-like experience required
+
+- **Public-Facing Applications:**
+  - SEO-critical content
+  - Public website with marketing pages
+  - E-commerce or consumer-facing apps
+
+- **Team/Ecosystem Requirements:**
+  - Team has JavaScript/TypeScript expertise
+  - Need to integrate with complex frontend ecosystem
+  - Building a product that will scale to enterprise complexity
+
+**Bottom Line:** Don't choose Next.js/Svelte/Vue just because they're "modern" or "better" - they add significant complexity. Choose them when Streamlit/Dash actually can't deliver the UX you need or handle your scale.
+
+---
 
 ### Recommended Framework by Use Case
 
