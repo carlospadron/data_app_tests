@@ -78,14 +78,15 @@ The following technologies were considered but excluded from testing for specifi
 |-----------|----------|--------|-------------|-------|
 | Streamlit | `streamlit_data_app/` | ✅ Implemented | 3 | **Very Easy:** PyDeck built-in, uses MapLibre GL JS natively. Reactive by default. Sidebar controls auto-refresh. Viewport state preserved across reruns. Perfect for rapid prototyping. |
 | Dash | `dash_data_app/` | ✅ Implemented | 3 | **Easy:** Plotly-based with MapLibre GL JS rendering. Callback system for reactivity. More layout control than Streamlit. Good for custom dashboards. |
-| Reflex | - | ⏸️ Paused | - | Full-stack Python, but more complex than needed for this use case |
+| Reflex | `reflex_data_app/` | ❌ **FAILED** | - | **Failed:** JavaScript integration issues. Scripts embedded via rx.script() or rx.html() do not execute reliably. Unable to initialize MapLibre GL despite multiple approaches. Not suitable for complex third-party JS library integration. |
 
 ### Documentation
 
 - `ANGULAR.md` - Angular implementation guide with MapLibre GL
-- `DASH.md` - Dash with Plotly/Mapbox implementation guide
+- `DASH.md` - Dash with Plotly implementation guide
 - `FLUTTER.md` - Flutter setup and integration guide
 - `NEXTJS.md` - Next.js comprehensive implementation guide
+- `REFLEX.md` - Reflex full-stack Python implementation guide
 - `STREAMLIT.md` - Streamlit with PyDeck implementation guide
 - `SVELTE.md` - Svelte implementation guide
 - `VUE.md` - Vue.js implementation notes
@@ -103,6 +104,7 @@ The following technologies were considered but excluded from testing for specifi
 | Flutter | ⭐⭐ Medium | maplibre_gl package | Moderate | Good (requires JSON parsing) |
 | Streamlit | ⭐⭐⭐ High | PyDeck (MapLibre GL JS) | Very Easy | Excellent |
 | Dash | ⭐⭐⭐ High | Plotly (MapLibre GL JS) | Easy | Excellent |
+| Reflex | ❌ Failed | N/A | N/A | **Failed - Script execution issues** |
 
 ### Development Experience
 
@@ -112,21 +114,23 @@ The following technologies were considered but excluded from testing for specifi
 | Next.js | ~8 min | Low-Medium | ⚡ Fast | React hooks | Low |
 | Vue | ~8 min | Low-Medium | ⚡ Fast | Composition API | Low |
 | Dash | ~5 min | Medium | 🔄 Moderate | Callbacks | Low-Medium |
+| Reflex | ~8 min | Medium | ⚡ Fast | State class | Low-Medium |
 | Streamlit | ~3 min | Very Low | ⚡ Fast | Auto-refresh | Minimal |
 | Angular | ~15 min | Medium-High | 🔄 Moderate | Services/Signals | High |
 | Flutter | ~10 min | Medium | ⚡ Fast | StatefulWidget | Medium |
 
 ### Layer Toggle Implementation Complexity
 
-| Framework | Lines of Code | Implementation Notes |
-|-Dash | ~95 | Plotly traces, callback decorator, checklist component |
-| ----------|--------------|---------------------|
+| Framework | Lines of Code | Implementation Approach |
+|----------|--------------|---------------------|
 | Streamlit | ~60 | Conditional layer creation in Python, sidebar checkboxes |
+| Dash | ~95 | Plotly traces, callback decorator, checklist component |
 | Svelte | ~160 | Reactive variables with bind:checked, simple toggle functions |
 | Vue | ~165 | Composition API with refs, v-model binding |
 | Next.js | ~185 | React hooks, inline styles |
 | Angular | ~190 | TypeScript class, template with property binding |
 | Flutter | ~200 | StatefulWidget with async layer visibility methods |
+| Reflex | ❌ Failed | N/A - Script execution issues prevented completion |
 
 ### Deployment Options
 
@@ -135,6 +139,7 @@ The following technologies were considered but excluded from testing for specifi
 | Next.js | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Vercel | ⭐⭐⭐ Excellent |
 | Svelte | ✅ Yes | ✅ Yes (SvelteKit) | ✅ Yes | ✅ Vercel/Netlify | ⭐⭐⭐ Excellent |
 | Vue | ✅ Yes | ✅ Yes (Nuxt) | ✅ Yes | ✅ Vercel/Netlify | ⭐⭐⭐ Excellent |
+| Reflex | ❌ Failed | ❌ Failed | N/A | N/A | ❌ Test Failed |
 | Dash | ❌ No | ❌ No | ✅ Yes | ❌ No | ⭐⭐ Good (Cloud/Docker) |
 | Angular | ✅ Yes | ✅ Yes (Universal) | ✅ Yes | ⚠️ Limited | ⭐⭐ Good |
 | Streamlit | ❌ No | ❌ No | ✅ Yes | ❌ No | ⭐⭐ Good (Cloud/Docker) |
@@ -177,6 +182,7 @@ Each prototype has its own README with specific setup instructions:
 5. **Flutter**: See `FLUTTER.md`
 6. **Streamlit**: See `STREAMLIT.md`
 7. **Dash**: See `DASH.md`
+8. **Reflex**: See `REFLEX.md` (⚠️ Test Failed)
 
 ## Quick Start
 
@@ -216,6 +222,11 @@ cd dash_data_app
 uv sync
 uv run python app.py
 
+# Reflex (⚠️ FAILED - Not functional)
+# cd reflex_data_app
+# uv sync
+# uv run reflex init
+# uv run reflex run
 ```
 
 ## Contributing
@@ -230,6 +241,7 @@ This is a testing and evaluation repository. Each prototype demonstrates:
 ## License
 See `LICENSE` file for details.
 
+- **Full-Stack Apps**: Reflex (pure Python with React performance, 170 lines, state-based)
 ## Conclusions
 
 ### Recommended Framework by Use Case
@@ -237,6 +249,7 @@ See `LICENSE` file for details.
 **For Python Developers:**
 - **Quick Prototyping**: Streamlit (simplest, 60 lines, automatic state management)
 - **Custom Dashboards**: Dash (more layout control, 95 lines, callback-based reactivity)
+- **⚠️ Not Recommended**: Reflex (failed - JavaScript integration issues prevent third-party library usage)
 
 **For JavaScript Developers:**
 - **Rapid Development**: Svelte (minimal boilerplate, very intuitive)
@@ -249,10 +262,13 @@ See `LICENSE` file for details.
 
 ### MapLibre GL Integration Success
 
-All tested frameworks successfully integrate with MapLibre GL:
+**Successful Integrations:**
 - **JavaScript frameworks** (Svelte, Next.js, Vue, Angular) have native, straightforward integration
 - **Python frameworks** (Streamlit via PyDeck, Dash via Plotly) use MapLibre GL JS natively
 - **Flutter** requires a package but works well across platforms
+
+**Failed Integration:**
+- **Reflex** - Unable to reliably execute embedded JavaScript. Multiple approaches attempted (rx.script(), rx.html(), component-based) all failed. The React compilation layer interferes with direct script execution, making third-party JS library integration impractical.
 
 **Note:** Plotly switched from Mapbox GL JS to MapLibre GL JS, eliminating the need for API tokens.
 
