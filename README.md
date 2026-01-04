@@ -325,6 +325,7 @@ Backend integration patterns
 
 ## Future Work
 
+- Add table and sync selection with map
 - Performance benchmarks (load time, FPS, memory usage)
 - Bundle size comparisons
 - Production deployment examples for each framework
