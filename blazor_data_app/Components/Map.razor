@@ -1,0 +1,104 @@
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
+@implements IAsyncDisposable
+
+<div style="position: relative; width: 100%; height: 100vh;">
+    <div id="map" style="width: 100%; height: 100%;"></div>
+
+    <div class="layer-control">
+        <h3>Layers</h3>
+        <div class="layer-item">
+            <label>
+                <input type="checkbox" checked="@regionsVisible" @onchange="ToggleRegions" />
+                Regions
+            </label>
+        </div>
+        <div class="layer-item">
+            <label>
+                <input type="checkbox" checked="@pointsVisible" @onchange="TogglePoints" />
+                Points of Interest
+            </label>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IJSObjectReference? mapModule;
+    private bool regionsVisible = true;
+    private bool pointsVisible = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            mapModule = await JS.InvokeAsync<IJSObjectReference>(
+                "import", "./js/mapInterop.js");
+            await mapModule.InvokeVoidAsync("initializeMap", "map");
+        }
+    }
+
+    private async Task ToggleRegions(ChangeEventArgs e)
+    {
+        regionsVisible = (bool)(e.Value ?? true);
+        if (mapModule is not null)
+        {
+            await mapModule.InvokeVoidAsync("setLayerVisibility",
+                new[] { "regions-fill", "regions-outline" }, regionsVisible);
+        }
+    }
+
+    private async Task TogglePoints(ChangeEventArgs e)
+    {
+        pointsVisible = (bool)(e.Value ?? true);
+        if (mapModule is not null)
+        {
+            await mapModule.InvokeVoidAsync("setLayerVisibility",
+                new[] { "points" }, pointsVisible);
+        }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (mapModule is not null)
+        {
+            await mapModule.InvokeVoidAsync("destroyMap");
+            await mapModule.DisposeAsync();
+        }
+    }
+}
+
+<style>
+    .layer-control {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background: white;
+        padding: 15px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        min-width: 200px;
+    }
+
+    .layer-control h3 {
+        margin: 0 0 10px 0;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .layer-item {
+        margin: 8px 0;
+    }
+
+    .layer-item label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .layer-item input[type=checkbox] {
+        margin-right: 8px;
+        cursor: pointer;
+    }
+</style>
