@@ -205,7 +205,7 @@ Or with hot reload:
 dotnet watch run
 ```
 
-Open your browser and navigate to `http://localhost:5000` (or the URL shown in the terminal).
+Open your browser and navigate to `http://localhost:5015` (or the URL shown in the terminal).
 
 ## Project Structure
 
