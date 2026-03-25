@@ -19,6 +19,7 @@ Test and compare different technology stacks for building data applications with
 - **Svelte** - Lightweight reactive framework
 - **Vue** - Progressive JavaScript framework
 - **Angular** - Full-featured TypeScript framework
+- **Blazor** - C#/.NET WebAssembly framework
 
 ### Multi-Platform Frameworks
 - **Flutter** - Cross-platform framework using Dart
@@ -70,6 +71,7 @@ The following technologies were considered but excluded from testing for specifi
 | Svelte | Web | `svelte_data_app/` | ✅ Implemented | 4 | **Very Easy:** Create `.svelte` files in `src/lib/components/`. Minimal boilerplate, reactive by default. Svelte stores for state management. Clean, intuitive syntax for rapid development. |
 | Vue | Web | `vue_data_app/` | ✅ Implemented | 5 | **Easy:** Create `.vue` files in `src/components/`. Composition API provides flexible reactivity. Good balance of simplicity and power for scaling applications. |
 | Angular | Web | `angular_data_app/` | ✅ Implemented | 7 | **Moderate:** Use `ng generate component` CLI. More setup required (module imports, types). Enterprise-ready with comprehensive tooling. Best for large teams and complex apps. |
+| Blazor | Web | `blazor_data_app/` | ✅ Implemented | 5 | **Moderate:** C#/.NET WebAssembly. MapLibre GL integrated via JS interop module. Razor components for UI. Ideal for .NET teams building web apps. Static deployment possible. |
 | Flutter | Multi-Platform | `flutter_data_app/` | ✅ Implemented | 6 | **Moderate:** Multi-platform (Web, Android, iOS). Requires platform-specific configs (permissions, minSDK, web index.html). Dart language. Hot reload for fast iteration. Strong for mobile-first apps. |
 
 ### Python Data App Frameworks
@@ -83,6 +85,7 @@ The following technologies were considered but excluded from testing for specifi
 ### Documentation
 
 - `ANGULAR.md` - Angular implementation guide with MapLibre GL
+- `BLAZOR.md` - Blazor WebAssembly implementation guide
 - `DASH.md` - Dash with Plotly implementation guide
 - `FLUTTER.md` - Flutter setup and integration guide
 - `NEXTJS.md` - Next.js comprehensive implementation guide
@@ -101,6 +104,7 @@ The following technologies were considered but excluded from testing for specifi
 | Svelte | ⭐⭐⭐ High | Direct JS library import | Very Easy | Excellent |
 | Vue | ⭐⭐⭐ High | Direct JS library import | Easy | Excellent |
 | Angular | ⭐⭐⭐ High | Direct JS library import | Moderate | Excellent |
+| Blazor | ⭐⭐⭐ High | JS interop (CDN) | Moderate | Excellent |
 | Flutter | ⭐⭐ Medium | maplibre_gl package | Moderate | Good (requires JSON parsing) |
 | Streamlit | ⭐⭐⭐ High | PyDeck (MapLibre GL JS) | Very Easy | Excellent |
 | Dash | ⭐⭐⭐ High | Plotly (MapLibre GL JS) | Easy | Excellent |
@@ -116,6 +120,7 @@ The following technologies were considered but excluded from testing for specifi
 | Dash | ~5 min | Medium | 🔄 Moderate | Callbacks | Low-Medium |
 | Reflex | ~8 min | Medium | ⚡ Fast | State class | Low-Medium |
 | Streamlit | ~3 min | Very Low | ⚡ Fast | Auto-refresh | Minimal |
+| Blazor | ~10 min | Medium | ⚡ Fast | Component state | Medium |
 | Angular | ~15 min | Medium-High | 🔄 Moderate | Services/Signals | High |
 | Flutter | ~10 min | Medium | ⚡ Fast | StatefulWidget | Medium |
 
@@ -129,6 +134,7 @@ The following technologies were considered but excluded from testing for specifi
 | Vue | ~165 | Composition API with refs, v-model binding |
 | Next.js | ~185 | React hooks, inline styles |
 | Angular | ~190 | TypeScript class, template with property binding |
+| Blazor | ~195 | C# component state, JS interop for MapLibre GL visibility |
 | Flutter | ~200 | StatefulWidget with async layer visibility methods |
 | Reflex | ❌ Failed | N/A - Script execution issues prevented completion |
 
@@ -139,6 +145,7 @@ The following technologies were considered but excluded from testing for specifi
 | Next.js | ✅ Yes | ✅ Yes | ✅ Yes | ✅ Vercel | ⭐⭐⭐ Excellent |
 | Svelte | ✅ Yes | ✅ Yes (SvelteKit) | ✅ Yes | ✅ Vercel/Netlify | ⭐⭐⭐ Excellent |
 | Vue | ✅ Yes | ✅ Yes (Nuxt) | ✅ Yes | ✅ Vercel/Netlify | ⭐⭐⭐ Excellent |
+| Blazor | ✅ Yes | ❌ No | ✅ Yes | ⚠️ Limited | ⭐⭐⭐ Excellent (Static) |
 | Reflex | ❌ Failed | ❌ Failed | N/A | N/A | ❌ Test Failed |
 | Dash | ❌ No | ❌ No | ✅ Yes | ❌ No | ⭐⭐ Good (Cloud/Docker) |
 | Angular | ✅ Yes | ✅ Yes (Universal) | ✅ Yes | ⚠️ Limited | ⭐⭐ Good |
@@ -159,14 +166,14 @@ The following technologies were considered but excluded from testing for specifi
 3. **Vue** - Mature, flexible, good balance of features
 
 #### Best for Cross-Platform
-1. **Flutter** - True multi-platform (Web/iOS/Android), but web performance varies
+1. **Flutter** - True multi-platform (Web/iOS/Android/Desktop) from a single codebase, but web performance varies. (Blazor WebAssembly is web-only; multi-platform requires separate MAUI project, no web support)
 
 #### Best for Enterprise
 1. **Angular** - Comprehensive tooling, strong typing, established patterns
 2. **Next.js** - Strong ecosystem, great developer experience
 
 #### MapLibre GL Integration Winner
-**Tie: All frameworks except Flutter** - JavaScript frameworks (Svelte, Next.js, Vue, Angular) and Python frameworks (Streamlit, Dash) all have excellent native MapLibre GL JS integration. Flutter has medium compatibility requiring a package wrapper.
+**Tie: All frameworks except Flutter** - JavaScript frameworks (Svelte, Next.js, Vue, Angular), .NET framework (Blazor via JS interop), and Python frameworks (Streamlit, Dash) all have excellent MapLibre GL JS integration. Flutter has medium compatibility requiring a package wrapper.
 
 #### Simplest Implementation
 **Streamlit** - 60 lines of Python, built-in PyDeck with MapLibre GL JS, automatic state management.
@@ -179,10 +186,11 @@ Each prototype has its own README with specific setup instructions:
 2. **Svelte**: See `SVELTE.md`
 3. **Vue**: See `VUE.md`
 4. **Angular**: See `ANGULAR.md`
-5. **Flutter**: See `FLUTTER.md`
-6. **Streamlit**: See `STREAMLIT.md`
-7. **Dash**: See `DASH.md`
-8. **Reflex**: See `REFLEX.md` (⚠️ Test Failed)
+5. **Blazor**: See `BLAZOR.md`
+6. **Flutter**: See `FLUTTER.md`
+7. **Streamlit**: See `STREAMLIT.md`
+8. **Dash**: See `DASH.md`
+9. **Reflex**: See `REFLEX.md` (⚠️ Test Failed)
 
 ## Quick Start
 
@@ -206,6 +214,10 @@ npm run dev
 cd angular_data_app
 npm install
 ng serve
+
+# Blazor (Web)
+cd blazor_data_app
+dotnet run
 
 # Flutter (Web)
 cd flutter_data_app
