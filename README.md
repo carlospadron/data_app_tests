@@ -166,7 +166,7 @@ The following technologies were considered but excluded from testing for specifi
 3. **Vue** - Mature, flexible, good balance of features
 
 #### Best for Cross-Platform
-1. **Flutter** - True multi-platform (Web/iOS/Android), but web performance varies
+1. **Flutter** - True multi-platform (Web/iOS/Android/Desktop) from a single codebase, but web performance varies. (Blazor WebAssembly is web-only; multi-platform requires separate MAUI project, no web support)
 
 #### Best for Enterprise
 1. **Angular** - Comprehensive tooling, strong typing, established patterns
