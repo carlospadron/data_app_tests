@@ -27,6 +27,7 @@ Test and compare different technology stacks for building data applications with
 ### Data App Frameworks
 - **Streamlit** - Python-based data app framework with simple API
 - **Dash** - Python framework by Plotly for analytical web apps
+- **FastHTML** - Python HTML-first framework for lightweight server-rendered apps
 - **Reflex** - Python full-stack framework with React-like components
 
 ## Technologies Excluded from Testing
@@ -54,7 +55,7 @@ The following technologies were considered but excluded from testing for specifi
 - **Gradio** - ML demo-focused framework with limited UI customization; too specialized for building rich spatial data applications.
 - **Shiny** - Primarily R-focused (Python support secondary); better alternatives exist for Python-based spatial apps.
 - **Taipy** - Newer framework with less mature ecosystem and limited MapLibre GL integration examples.
-- **Panel** - Similar to Streamlit but less mature ecosystem. Streamlit and Dash already provide comprehensive Python data app coverage for different use cases (rapid prototyping vs. custom dashboards).
+- **Panel** - Similar to Streamlit but less mature ecosystem. Streamlit, Dash, and FastHTML already provide comprehensive Python data app coverage across rapid prototyping, dashboards, and lightweight custom web apps.
 - **Kepler.gl** - Visualization component/tool, not a framework for building custom applications. Designed for geospatial data exploration rather than building full data apps.
 - **Observable** - JavaScript notebook platform designed for data visualization and exploration, runs in browser only. Cannot write to databases without separate backend services. Better suited for prototyping than building full applications.
 - **Evidence** - BI reporting tool focused on reading and displaying data via markdown/SQL. Not designed for transactional operations or database writes. Lacks the interactive form components needed for data entry applications.
@@ -80,6 +81,7 @@ The following technologies were considered but excluded from testing for specifi
 |-----------|----------|--------|-------------|-------|
 | Streamlit | `streamlit_data_app/` | ✅ Implemented | 3 | **Very Easy:** PyDeck built-in, uses MapLibre GL JS natively. Reactive by default. Sidebar controls auto-refresh. Viewport state preserved across reruns. Perfect for rapid prototyping. |
 | Dash | `dash_data_app/` | ✅ Implemented | 3 | **Easy:** Plotly-based with MapLibre GL JS rendering. Callback system for reactivity. More layout control than Streamlit. Good for custom dashboards. |
+| FastHTML | `fasthtml_data_app/` | ✅ Implemented | 3 | **Easy:** HTML-first Python framework. MapLibre GL JS integrates directly with script tags and minimal boilerplate. Good for lightweight, server-rendered apps. |
 | Reflex | `reflex_data_app/` | ❌ **FAILED** | - | **Failed:** JavaScript integration issues. Scripts embedded via rx.script() or rx.html() do not execute reliably. Unable to initialize MapLibre GL despite multiple approaches. Not suitable for complex third-party JS library integration. |
 
 ### Documentation
@@ -87,6 +89,7 @@ The following technologies were considered but excluded from testing for specifi
 - `ANGULAR.md` - Angular implementation guide with MapLibre GL
 - `BLAZOR.md` - Blazor WebAssembly implementation guide
 - `DASH.md` - Dash with Plotly implementation guide
+- `FASTHTML.md` - FastHTML implementation guide
 - `FLUTTER.md` - Flutter setup and integration guide
 - `NEXTJS.md` - Next.js comprehensive implementation guide
 - `REFLEX.md` - Reflex full-stack Python implementation guide
@@ -108,6 +111,7 @@ The following technologies were considered but excluded from testing for specifi
 | Flutter | ⭐⭐ Medium | maplibre_gl package | Moderate | Good (requires JSON parsing) |
 | Streamlit | ⭐⭐⭐ High | PyDeck (MapLibre GL JS) | Very Easy | Excellent |
 | Dash | ⭐⭐⭐ High | Plotly (MapLibre GL JS) | Easy | Excellent |
+| FastHTML | ⭐⭐⭐ High | Direct MapLibre GL JS script integration | Easy | Excellent |
 | Reflex | ❌ Failed | N/A | N/A | **Failed - Script execution issues** |
 
 ### Development Experience
@@ -118,6 +122,7 @@ The following technologies were considered but excluded from testing for specifi
 | Next.js | ~8 min | Low-Medium | ⚡ Fast | React hooks | Low |
 | Vue | ~8 min | Low-Medium | ⚡ Fast | Composition API | Low |
 | Dash | ~5 min | Medium | 🔄 Moderate | Callbacks | Low-Medium |
+| FastHTML | ~5 min | Low | ⚡ Fast | HTML + lightweight JS handlers | Low |
 | Reflex | ~8 min | Medium | ⚡ Fast | State class | Low-Medium |
 | Streamlit | ~3 min | Very Low | ⚡ Fast | Auto-refresh | Minimal |
 | Blazor | ~10 min | Medium | ⚡ Fast | Component state | Medium |
@@ -130,6 +135,7 @@ The following technologies were considered but excluded from testing for specifi
 |----------|--------------|---------------------|
 | Streamlit | ~60 | Conditional layer creation in Python, sidebar checkboxes |
 | Dash | ~95 | Plotly traces, callback decorator, checklist component |
+| FastHTML | ~170 | Server-rendered HTML + direct MapLibre GL JS layer visibility handlers |
 | Svelte | ~160 | Reactive variables with bind:checked, simple toggle functions |
 | Vue | ~165 | Composition API with refs, v-model binding |
 | Next.js | ~185 | React hooks, inline styles |
@@ -148,6 +154,7 @@ The following technologies were considered but excluded from testing for specifi
 | Blazor | ✅ Yes | ❌ No | ✅ Yes | ⚠️ Limited | ⭐⭐⭐ Excellent (Static) |
 | Reflex | ❌ Failed | ❌ Failed | N/A | N/A | ❌ Test Failed |
 | Dash | ❌ No | ❌ No | ✅ Yes | ❌ No | ⭐⭐ Good (Cloud/Docker) |
+| FastHTML | ❌ No | ✅ Yes | ✅ Yes | ⚠️ Limited | ⭐⭐ Good (ASGI/Cloud) |
 | Angular | ✅ Yes | ✅ Yes (Universal) | ✅ Yes | ⚠️ Limited | ⭐⭐ Good |
 | Streamlit | ❌ No | ❌ No | ✅ Yes | ❌ No | ⭐⭐ Good (Cloud/Docker) |
 | Flutter | ✅ Web only | ❌ No | ✅ Yes | ❌ No | ⭐ Fair |
@@ -173,7 +180,7 @@ The following technologies were considered but excluded from testing for specifi
 2. **Next.js** - Strong ecosystem, great developer experience
 
 #### MapLibre GL Integration Winner
-**Tie: All frameworks except Flutter** - JavaScript frameworks (Svelte, Next.js, Vue, Angular), .NET framework (Blazor via JS interop), and Python frameworks (Streamlit, Dash) all have excellent MapLibre GL JS integration. Flutter has medium compatibility requiring a package wrapper.
+**Tie: All frameworks except Flutter** - JavaScript frameworks (Svelte, Next.js, Vue, Angular), .NET framework (Blazor via JS interop), and Python frameworks (Streamlit, Dash, FastHTML) all have excellent MapLibre GL JS integration. Flutter has medium compatibility requiring a package wrapper.
 
 #### Simplest Implementation
 **Streamlit** - 60 lines of Python, built-in PyDeck with MapLibre GL JS, automatic state management.
@@ -190,7 +197,8 @@ Each prototype has its own README with specific setup instructions:
 6. **Flutter**: See `FLUTTER.md`
 7. **Streamlit**: See `STREAMLIT.md`
 8. **Dash**: See `DASH.md`
-9. **Reflex**: See `REFLEX.md` (⚠️ Test Failed)
+9. **FastHTML**: See `FASTHTML.md`
+10. **Reflex**: See `REFLEX.md` (⚠️ Test Failed)
 
 ## Quick Start
 
@@ -231,6 +239,11 @@ uv run streamlit run app.py
 
 # Dash
 cd dash_data_app
+uv sync
+uv run python app.py
+
+# FastHTML
+cd fasthtml_data_app
 uv sync
 uv run python app.py
 

@@ -1,0 +1,9 @@
+[project]
+name = "fasthtml-data-app"
+version = "0.1.0"
+description = "FastHTML map demo with MapLibre layer toggles"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "python-fasthtml>=0.7.0",
+]
