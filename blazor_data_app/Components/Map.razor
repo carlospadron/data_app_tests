@@ -20,21 +20,69 @@
             </label>
         </div>
     </div>
+
+    <div class="table-control">
+        <h3>Points Table</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Coords</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var point in points)
+                {
+                    <tr class="@(selectedPointId == point.Id ? "selected" : "")" @onclick="() => FocusPoint(point.Id)">
+                        <td>@point.Name</td>
+                        <td>@point.Type</td>
+                        <td>@point.Lat.ToString("0.0"), @point.Lon.ToString("0.0")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
 @code {
+    private sealed record PointRow(int Id, string Name, string Type, double Lon, double Lat);
+
     private IJSObjectReference? mapModule;
+    private DotNetObjectReference<Map>? dotNetRef;
     private bool regionsVisible = true;
     private bool pointsVisible = true;
+    private int? selectedPointId;
+    private List<PointRow> points = [];
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
+            dotNetRef = DotNetObjectReference.Create(this);
             mapModule = await JS.InvokeAsync<IJSObjectReference>(
                 "import", "./js/mapInterop.js");
-            await mapModule.InvokeVoidAsync("initializeMap", "map");
+            await mapModule.InvokeVoidAsync("initializeMap", "map", dotNetRef);
+            points = await mapModule.InvokeAsync<List<PointRow>>("getPoints") ?? [];
+            StateHasChanged();
         }
+    }
+
+    private async Task FocusPoint(int pointId)
+    {
+        selectedPointId = pointId;
+        if (mapModule is not null)
+        {
+            await mapModule.InvokeVoidAsync("focusPoint", pointId);
+        }
+    }
+
+    [JSInvokable]
+    public Task OnPointSelectedFromMap(int pointId)
+    {
+        selectedPointId = pointId;
+        StateHasChanged();
+        return Task.CompletedTask;
     }
 
     private async Task ToggleRegions(ChangeEventArgs e)
@@ -64,6 +112,7 @@
             await mapModule.InvokeVoidAsync("destroyMap");
             await mapModule.DisposeAsync();
         }
+        dotNetRef?.Dispose();
     }
 }
 
@@ -100,5 +149,48 @@
     .layer-item input[type=checkbox] {
         margin-right: 8px;
         cursor: pointer;
+    }
+
+    .table-control {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        background: white;
+        padding: 12px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        z-index: 1;
+        min-width: 320px;
+    }
+
+    .table-control h3 {
+        margin: 0 0 8px 0;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    th,
+    td {
+        text-align: left;
+        padding: 6px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    thead th {
+        border-bottom: 1px solid #ddd;
+    }
+
+    tbody tr {
+        cursor: pointer;
+    }
+
+    tbody tr.selected {
+        background: #fef3c7;
     }
 </style>
