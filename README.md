@@ -221,7 +221,7 @@ npm run dev
 # Angular
 cd angular_data_app
 npm install
-ng serve
+npx ng serve
 
 # Blazor (Web)
 cd blazor_data_app
