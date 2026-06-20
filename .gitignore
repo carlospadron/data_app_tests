@@ -1,2 +1,4 @@
 *.env
-fasthtml_data_app/.sesskey
+.sesskey
+*.pyc
+__pycache__/
