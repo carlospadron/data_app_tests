@@ -36,3 +36,46 @@
   margin-right: 8px;
   cursor: pointer;
 }
+
+.table-control {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  background: white;
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  z-index: 1;
+  min-width: 320px;
+}
+
+.table-control h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 6px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+thead th {
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr {
+  cursor: pointer;
+}
+
+tbody tr.selected {
+  background: #fef3c7;
+}
