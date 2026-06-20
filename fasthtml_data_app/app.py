@@ -1,6 +1,6 @@
 import json
 
-from fasthtml.common import Div, H1, H3, Input, Label, Link, Script, Style, Title, fast_app, serve
+from fasthtml.common import Div, H1, H3, Input, Label, Link, NotStr, Script, Style, Title, fast_app, serve
 
 REGIONS_DATA = {
     "type": "FeatureCollection",
@@ -29,33 +29,49 @@ POINTS_DATA = {
     "features": [
         {
             "type": "Feature",
-            "properties": {"name": "City A", "type": "Capital"},
+            "id": 0,
+            "properties": {"id": 0, "name": "City A", "type": "Capital"},
             "geometry": {"type": "Point", "coordinates": [0, 40]},
         },
         {
             "type": "Feature",
-            "properties": {"name": "City B", "type": "Major"},
+            "id": 1,
+            "properties": {"id": 1, "name": "City B", "type": "Major"},
             "geometry": {"type": "Point", "coordinates": [30, 20]},
         },
         {
             "type": "Feature",
-            "properties": {"name": "City C", "type": "Minor"},
+            "id": 2,
+            "properties": {"id": 2, "name": "City C", "type": "Minor"},
             "geometry": {"type": "Point", "coordinates": [-5, 35]},
         },
     ],
 }
+
+POINT_ROWS = [
+    {
+        "id": feature["properties"]["id"],
+        "name": feature["properties"]["name"],
+        "type": feature["properties"]["type"],
+        "lon": feature["geometry"]["coordinates"][0],
+        "lat": feature["geometry"]["coordinates"][1],
+    }
+    for feature in POINTS_DATA["features"]
+]
 
 app, rt = fast_app(
     hdrs=(
         Link(rel="stylesheet", href="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.css"),
         Style(
             """
-            body { margin: 0; font-family: system-ui, sans-serif; }
-            h1 { text-align: center; margin: 18px 0; }
-            #map { width: 100%; height: calc(100vh - 72px); }
+            *, *::before, *::after { box-sizing: border-box; }
+            html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; }
+            main { padding: 0 !important; max-width: none !important; width: 100% !important; }
+            h1 { text-align: center; margin: 0; padding: 18px 0; line-height: 1; }
+            #map { position: absolute; inset: 0; width: 100%; height: 100%; }
             #layer-controls {
                 position: absolute;
-                top: 90px;
+                top: 60px;
                 left: 20px;
                 z-index: 1000;
                 background: #fff;
@@ -72,6 +88,32 @@ app, rt = fast_app(
                 margin: 6px 0;
                 font-size: 0.95rem;
             }
+            #table-controls {
+              position: absolute;
+              right: 20px;
+              bottom: 20px;
+              z-index: 1000;
+              background: #fff;
+              border-radius: 6px;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+              padding: 12px;
+              min-width: 330px;
+            }
+            #table-controls h3 { margin: 0 0 8px; font-size: 1rem; }
+            #table-controls table {
+              width: 100%;
+              border-collapse: collapse;
+              font-size: 0.85rem;
+            }
+            #table-controls th, #table-controls td {
+              text-align: left;
+              padding: 6px;
+              border-bottom: 1px solid #f0f0f0;
+            }
+            #table-controls th { border-bottom: 1px solid #ddd; }
+            #table-controls tbody tr { cursor: pointer; }
+            #table-controls tbody tr.selected,
+            #table-controls tbody tr.selected td { background: #fef3c7 !important; }
             """
         ),
     )
@@ -82,14 +124,36 @@ app, rt = fast_app(
 def get():
     return (
         Title("FastHTML Data App"),
-        H1("FastHTML Data App with Interactive Map"),
         Div(
-            H3("Layers"),
-            Label(Input(type="checkbox", id="toggle-regions", checked=True), "Regions"),
-            Label(Input(type="checkbox", id="toggle-points", checked=True), "Points of Interest"),
-            id="layer-controls",
+            H1("FastHTML Data App with Interactive Map", style="position:absolute;top:0;left:0;right:0;z-index:1001;pointer-events:none;"),
+            Div(
+                H3("Layers"),
+                Label(Input(type="checkbox", id="toggle-regions", checked=True), "Regions"),
+                Label(Input(type="checkbox", id="toggle-points", checked=True), "Points of Interest"),
+                id="layer-controls",
+            ),
+            Div(
+                H3("Points Table"),
+                Div(
+                  NotStr(
+                    f"""
+                    <table id='points-table'>
+                        <thead>
+                            <tr><th>Name</th><th>Type</th><th>Coords</th></tr>
+                        </thead>
+                        <tbody>
+                            {''.join([f"<tr data-point-id='{row['id']}'><td>{row['name']}</td><td>{row['type']}</td><td>{row['lat']:.1f}, {row['lon']:.1f}</td></tr>" for row in POINT_ROWS])}
+                        </tbody>
+                    </table>
+                    """,
+                  ),
+                    id="points-table-wrapper",
+                ),
+                id="table-controls",
+            ),
+            Div(id="map"),
+            style="position:relative;width:100vw;height:100vh;overflow:hidden;",
         ),
-        Div(id="map"),
         Script(src="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.js"),
         Script(
             f"""
@@ -132,11 +196,81 @@ def get():
                 type: 'circle',
                 source: 'points',
                 paint: {{
-                  'circle-radius': 7,
-                  'circle-color': '#ff3300',
+                  'circle-radius': ['case', ['boolean', ['feature-state', 'selected'], false], 14, 10],
+                  'circle-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#facc15', '#ff3300'],
                   'circle-stroke-color': '#ffffff',
-                  'circle-stroke-width': 1.5
+                  'circle-stroke-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 1.5]
                 }}
+              }});
+
+              let selectedPointId = null;
+
+              const syncSelectedPoint = (nextId) => {{
+                if (selectedPointId !== null) {{
+                  map.setFeatureState({{ source: 'points', id: selectedPointId }}, {{ selected: false }});
+                }}
+                if (nextId !== null) {{
+                  map.setFeatureState({{ source: 'points', id: nextId }}, {{ selected: true }});
+                }}
+                selectedPointId = nextId;
+
+                document.querySelectorAll('#points-table tbody tr[data-point-id]').forEach((row) => {{
+                  const rowId = Number(row.getAttribute('data-point-id'));
+                  if (nextId !== null && rowId === nextId) {{
+                    row.classList.add('selected');
+                    row.scrollIntoView({{ block: 'nearest' }});
+                  }} else {{
+                    row.classList.remove('selected');
+                  }}
+                }});
+              }};
+
+              const focusPoint = (pointId) => {{
+                const feature = pointsData.features.find((item) => item.properties.id === pointId);
+                if (!feature) return;
+                map.flyTo({{ center: feature.geometry.coordinates, zoom: 5, essential: true }});
+                syncSelectedPoint(pointId);
+              }};
+
+              map.on('click', (event) => {{
+                const tolerancePx = 24;
+                const maxDistSq = tolerancePx * tolerancePx;
+                let nearestId = null;
+                let nearestDistSq = Number.POSITIVE_INFINITY;
+
+                for (const feature of pointsData.features) {{
+                  const [lon, lat] = feature.geometry.coordinates;
+                  const projected = map.project([lon, lat]);
+                  const dx = projected.x - event.point.x;
+                  const dy = projected.y - event.point.y;
+                  const distSq = dx * dx + dy * dy;
+
+                  if (distSq < nearestDistSq) {{
+                    nearestDistSq = distSq;
+                    nearestId = Number(feature.properties.id);
+                  }}
+                }}
+
+                if (nearestId !== null && nearestDistSq <= maxDistSq) {{
+                  focusPoint(nearestId);
+                }}
+              }});
+
+              map.on('mouseenter', 'points-layer', () => {{
+                map.getCanvas().style.cursor = 'pointer';
+              }});
+
+              map.on('mouseleave', 'points-layer', () => {{
+                map.getCanvas().style.cursor = '';
+              }});
+
+              document.querySelectorAll('#points-table tbody tr[data-point-id]').forEach((row) => {{
+                row.addEventListener('click', () => {{
+                  const pointId = Number(row.getAttribute('data-point-id'));
+                  if (!Number.isNaN(pointId)) {{
+                    focusPoint(pointId);
+                  }}
+                }});
               }});
 
               const setVisible = (layerId, visible) => {{
