@@ -35,21 +35,38 @@ regions_data = [
 ]
 
 points_data = [
-    {"name": "City A", "type": "Capital", "coordinates": [0, 40]},
-    {"name": "City B", "type": "Major", "coordinates": [30, 20]},
-    {"name": "City C", "type": "Minor", "coordinates": [-5, 35]}
+    {"id": 0, "name": "City A", "type": "Capital", "coordinates": [0, 40]},
+    {"id": 1, "name": "City B", "type": "Major", "coordinates": [30, 20]},
+    {"id": 2, "name": "City C", "type": "Minor", "coordinates": [-5, 35]}
 ]
+
+if "selected_point_id" not in st.session_state:
+    st.session_state.selected_point_id = None
 
 # Sidebar for layer controls
 st.sidebar.header("Layers")
 show_regions = st.sidebar.checkbox("Regions", value=True)
 show_points = st.sidebar.checkbox("Points of Interest", value=True)
 
+point_lookup = {point["name"]: point for point in points_data}
+selected_name = st.sidebar.selectbox(
+    "Focus point from table",
+    ["None"] + [point["name"] for point in points_data],
+    index=0 if st.session_state.selected_point_id is None else st.session_state.selected_point_id + 1,
+)
+
+if selected_name != "None":
+    selected_point = point_lookup[selected_name]
+    st.session_state.selected_point_id = selected_point["id"]
+else:
+    selected_point = None
+    st.session_state.selected_point_id = None
+
 # Define initial view state
 view_state = pdk.ViewState(
-    latitude=35,
-    longitude=15,
-    zoom=3,
+    latitude=selected_point["coordinates"][1] if selected_point else 35,
+    longitude=selected_point["coordinates"][0] if selected_point else 15,
+    zoom=5 if selected_point else 3,
     pitch=0,
 )
 
@@ -73,12 +90,23 @@ if show_regions:
     layers.append(regions_layer)
 
 if show_points:
+    points_layer_data = []
+    for point in points_data:
+        is_selected = point["id"] == st.session_state.selected_point_id
+        points_layer_data.append(
+            {
+                **point,
+                "color": [250, 204, 21] if is_selected else [255, 51, 0],
+                "radius": 80000 if is_selected else 50000,
+            }
+        )
+
     points_layer = pdk.Layer(
         "ScatterplotLayer",
-        points_data,
+        points_layer_data,
         get_position="coordinates",
-        get_radius=50000,
-        get_fill_color=[255, 51, 0],
+        get_radius="radius",
+        get_fill_color="color",
         get_line_color=[255, 255, 255],
         line_width_min_pixels=2,
         pickable=True,
@@ -101,3 +129,15 @@ deck = pdk.Deck(
 
 # Display map in Streamlit
 st.pydeck_chart(deck)
+
+st.subheader("Points Table")
+table_rows = [
+    {
+        "Name": point["name"],
+        "Type": point["type"],
+        "Coordinates": f"{point['coordinates'][1]:.1f}, {point['coordinates'][0]:.1f}",
+        "Selected": point["id"] == st.session_state.selected_point_id,
+    }
+    for point in points_data
+]
+st.dataframe(table_rows, use_container_width=True, hide_index=True)

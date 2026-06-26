@@ -79,7 +79,7 @@ The following technologies were considered but excluded from testing for specifi
 
 | Framework | Location | Status | Setup Steps | Notes |
 |-----------|----------|--------|-------------|-------|
-| Streamlit | `streamlit_data_app/` | ✅ Implemented | 3 | **Very Easy:** PyDeck built-in, uses MapLibre GL JS natively. Reactive by default. Sidebar controls auto-refresh. Viewport state preserved across reruns. Perfect for rapid prototyping. |
+| Streamlit | `streamlit_data_app/` | ✅ Implemented | 3 | **Very Easy:** PyDeck built-in, uses MapLibre GL JS natively. Reactive by default. Sidebar controls auto-refresh. Viewport state preserved across reruns. Perfect for rapid prototyping. **Known deficiency:** robust map-click-to-table-row synchronization is limited in native Streamlit + PyDeck without custom components. |
 | Dash | `dash_data_app/` | ✅ Implemented | 3 | **Easy:** Plotly-based with MapLibre GL JS rendering. Callback system for reactivity. More layout control than Streamlit. Good for custom dashboards. |
 | FastHTML | `fasthtml_data_app/` | ✅ Implemented | 3 | **Easy:** HTML-first Python framework. MapLibre GL JS integrates directly with script tags and minimal boilerplate. Good for lightweight, server-rendered apps. |
 | Reflex | `reflex_data_app/` | ❌ **FAILED** | - | **Failed:** JavaScript integration issues. Scripts embedded via rx.script() or rx.html() do not execute reliably. Unable to initialize MapLibre GL despite multiple approaches. Not suitable for complex third-party JS library integration. |
@@ -203,21 +203,6 @@ Each prototype has its own README with specific setup instructions:
 ## Quick Start
 
 ```bash
-# Next.js
-cd nextjs_data_app
-npm install
-npm run dev
-
-# Svelte
-cd svelte_data_app
-npm install
-npm run dev
-
-# Vue
-cd vue_data_app
-npm install
-npm run dev
-
 # Angular
 cd angular_data_app
 npm install
@@ -226,16 +211,6 @@ npx ng serve
 # Blazor (Web)
 cd blazor_data_app
 dotnet run
-
-# Flutter (Web)
-cd flutter_data_app
-flutter pub get
-flutter run -d chrome
-
-# Streamlit
-cd streamlit_data_app
-uv sync
-uv run streamlit run app.py
 
 # Dash
 cd dash_data_app
@@ -246,6 +221,31 @@ uv run python app.py
 cd fasthtml_data_app
 uv sync
 uv run python app.py
+
+# Flutter (Web)
+cd flutter_data_app
+flutter pub get
+flutter run -d chrome
+
+# Next.js
+cd nextjs_data_app
+npm install
+npm run dev
+
+# Streamlit
+cd streamlit_data_app
+uv sync
+uv run streamlit run app.py
+
+# Svelte
+cd svelte_data_app
+npm install
+npm run dev
+
+# Vue
+cd vue_data_app
+npm install
+npm run dev
 
 # Reflex (⚠️ FAILED - Not functional)
 # cd reflex_data_app
