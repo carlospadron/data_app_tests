@@ -41,15 +41,34 @@ points_data = [
 
 # Layout
 app.layout = html.Div([
-    html.H1("Dash Data App with Interactive Map", style={
-        'textAlign': 'center',
-        'marginBottom': '20px',
-        'marginTop': '20px'
+    html.Div([
+        html.H1("Dash Data App with Interactive Map", style={
+            'margin': '0',
+            'fontSize': '1.45rem',
+            'fontWeight': '700',
+            'letterSpacing': '0.02em',
+            'color': '#0f172a'
+        }),
+        html.P("MapLibre + DataTable synchronized selection demo", style={
+            'margin': '4px 0 0 0',
+            'fontSize': '0.9rem',
+            'color': '#475569'
+        })
+    ], style={
+        'position': 'absolute',
+        'top': '14px',
+        'left': '20px',
+        'zIndex': '1100',
+        'background': 'rgba(255,255,255,0.88)',
+        'backdropFilter': 'blur(6px)',
+        'padding': '10px 14px',
+        'borderRadius': '12px',
+        'boxShadow': '0 10px 30px rgba(15, 23, 42, 0.12)'
     }),
     
     html.Div([
         html.Div([
-            html.H3("Layers", style={'marginBottom': '10px'}),
+            html.H3("Layers", style={'marginBottom': '10px', 'marginTop': '0', 'fontSize': '1rem'}),
             
             dcc.Checklist(
                 id='layer-toggles',
@@ -58,16 +77,18 @@ app.layout = html.Div([
                     {'label': ' Points of Interest', 'value': 'points'}
                 ],
                 value=['regions', 'points'],
-                style={'fontSize': '14px'}
+                style={'fontSize': '14px', 'color': '#0f172a'}
             )
         ], style={
             'position': 'absolute',
-            'top': '80px',
+            'top': '96px',
             'left': '20px',
-            'backgroundColor': 'white',
+            'background': 'rgba(255,255,255,0.92)',
+            'backdropFilter': 'blur(6px)',
             'padding': '15px',
-            'borderRadius': '4px',
-            'boxShadow': '0 2px 4px rgba(0,0,0,0.3)',
+            'borderRadius': '12px',
+            'boxShadow': '0 10px 30px rgba(15, 23, 42, 0.15)',
+            'border': '1px solid rgba(148, 163, 184, 0.25)',
             'zIndex': '1000',
             'minWidth': '200px'
         })
@@ -80,7 +101,7 @@ app.layout = html.Div([
     ),
 
     html.Div([
-        html.H3('Points Table', style={'marginBottom': '8px'}),
+        html.H3('Points Table', style={'marginBottom': '8px', 'marginTop': '0', 'fontSize': '1rem'}),
         dash_table.DataTable(
             id='points-table',
             columns=[
@@ -99,13 +120,30 @@ app.layout = html.Div([
             ],
             row_selectable='single',
             selected_rows=[],
-            style_cell={'padding': '6px', 'textAlign': 'left', 'fontSize': '13px'},
-            style_header={'fontWeight': 'bold'},
+            style_cell={
+                'padding': '8px',
+                'textAlign': 'left',
+                'fontSize': '13px',
+                'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif',
+                'border': 'none',
+                'color': '#0f172a',
+                'backgroundColor': 'transparent'
+            },
+            style_header={
+                'fontWeight': '700',
+                'color': '#334155',
+                'backgroundColor': 'rgba(241,245,249,0.8)',
+                'borderBottom': '1px solid #e2e8f0'
+            },
             style_data_conditional=[
                 {
                     'if': {'state': 'selected'},
                     'backgroundColor': '#fef3c7',
-                    'border': '1px solid #e5e7eb'
+                    'border': 'none'
+                },
+                {
+                    'if': {'row_index': 'odd'},
+                    'backgroundColor': 'rgba(248,250,252,0.9)'
                 }
             ]
         )
@@ -113,10 +151,12 @@ app.layout = html.Div([
         'position': 'absolute',
         'right': '20px',
         'bottom': '20px',
-        'backgroundColor': 'white',
+        'background': 'rgba(255,255,255,0.94)',
+        'backdropFilter': 'blur(6px)',
         'padding': '12px',
-        'borderRadius': '4px',
-        'boxShadow': '0 2px 4px rgba(0,0,0,0.3)',
+        'borderRadius': '12px',
+        'boxShadow': '0 10px 30px rgba(15, 23, 42, 0.15)',
+        'border': '1px solid rgba(148, 163, 184, 0.25)',
         'zIndex': '1000',
         'minWidth': '320px'
     }),
@@ -124,7 +164,13 @@ app.layout = html.Div([
     # Store to keep track of map state
     dcc.Store(id='map-state', data={'center': {'lat': 35, 'lon': 15}, 'zoom': 3}),
     dcc.Store(id='selected-point', data=None)
-])
+], style={
+    'width': '100vw',
+    'height': '100vh',
+    'overflow': 'hidden',
+    'background': 'linear-gradient(135deg, #eff6ff 0%, #f8fafc 45%, #e2e8f0 100%)',
+    'fontFamily': 'ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif'
+})
 
 @callback(
     Output('map', 'figure'),

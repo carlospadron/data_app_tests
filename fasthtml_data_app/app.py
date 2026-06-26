@@ -66,12 +66,28 @@ app, rt = fast_app(
             """
             *, *::before, *::after { box-sizing: border-box; }
             html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; }
-            main { padding: 0 !important; max-width: none !important; width: 100% !important; }
-            h1 { text-align: center; margin: 0; padding: 18px 0; line-height: 1; }
+            main { padding: 0 !important; max-width: none !important; width: 100% !important; height: 100% !important; }
+            #app-shell { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+            #top-bar {
+              position: absolute;
+              top: 0;
+              left: 0;
+              right: 0;
+              height: 62px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background: rgba(255, 255, 255, 0.9);
+              backdrop-filter: blur(6px);
+              border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+              z-index: 1002;
+            }
+            #top-bar h1 { margin: 0; font-size: 1.2rem; line-height: 1; }
+            #map-frame { position: absolute; top: 62px; left: 0; right: 0; bottom: 0; }
             #map { position: absolute; inset: 0; width: 100%; height: 100%; }
             #layer-controls {
                 position: absolute;
-                top: 60px;
+                top: 80px;
                 left: 20px;
                 z-index: 1000;
                 background: #fff;
@@ -114,6 +130,19 @@ app, rt = fast_app(
             #table-controls tbody tr { cursor: pointer; }
             #table-controls tbody tr.selected,
             #table-controls tbody tr.selected td { background: #fef3c7 !important; }
+            @media (max-width: 900px) {
+              #layer-controls {
+                top: 74px;
+                left: 10px;
+                min-width: 190px;
+              }
+              #table-controls {
+                right: 10px;
+                left: 10px;
+                bottom: 10px;
+                min-width: unset;
+              }
+            }
             """
         ),
     )
@@ -125,7 +154,7 @@ def get():
     return (
         Title("FastHTML Data App"),
         Div(
-            H1("FastHTML Data App with Interactive Map", style="position:absolute;top:0;left:0;right:0;z-index:1001;pointer-events:none;"),
+        Div(H1("FastHTML Data App with Interactive Map"), id="top-bar"),
             Div(
                 H3("Layers"),
                 Label(Input(type="checkbox", id="toggle-regions", checked=True), "Regions"),
@@ -151,8 +180,8 @@ def get():
                 ),
                 id="table-controls",
             ),
-            Div(id="map"),
-            style="position:relative;width:100vw;height:100vh;overflow:hidden;",
+              Div(Div(id="map"), id="map-frame"),
+              id="app-shell",
         ),
         Script(src="https://unpkg.com/maplibre-gl@5.9.0/dist/maplibre-gl.js"),
         Script(
@@ -168,6 +197,9 @@ def get():
             }});
 
             map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+            const resizeMap = () => map.resize();
+            window.addEventListener('resize', resizeMap);
 
             map.on('load', () => {{
               map.addSource('regions', {{ type: 'geojson', data: regionsData }});
@@ -285,6 +317,10 @@ def get():
               document.getElementById('toggle-points').addEventListener('change', (event) => {{
                 setVisible('points-layer', event.target.checked);
               }});
+
+              // Ensure map canvas aligns with final layout after controls mount.
+              requestAnimationFrame(() => map.resize());
+              setTimeout(() => map.resize(), 120);
             }});
             """
         ),

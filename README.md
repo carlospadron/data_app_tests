@@ -118,31 +118,46 @@ The following technologies were considered but excluded from testing for specifi
 
 | Framework | Setup Time | Learning Curve | Hot Reload | State Management | Code Verbosity |
 |-----------|-----------|---------------|------------|------------------|----------------|
-| Svelte | ~5 min | Low | ⚡ Instant | Reactive variables | Minimal |
-| Next.js | ~8 min | Low-Medium | ⚡ Fast | React hooks | Low |
-| Vue | ~8 min | Low-Medium | ⚡ Fast | Composition API | Low |
-| Dash | ~5 min | Medium | 🔄 Moderate | Callbacks | Low-Medium |
-| FastHTML | ~5 min | Low | ⚡ Fast | HTML + lightweight JS handlers | Low |
+| Svelte | ~5 min | Low | ⚡ Instant | Reactive variables | Medium |
+| Next.js | ~8 min | Low-Medium | ⚡ Fast | React hooks | Medium |
+| Vue | ~8 min | Low-Medium | ⚡ Fast | Composition API | Medium |
+| Dash | ~5 min | Medium | 🔄 Moderate | Callbacks | Medium |
+| FastHTML | ~5 min | Low | ⚡ Fast | HTML + lightweight JS handlers | Medium-High |
 | Reflex | ~8 min | Medium | ⚡ Fast | State class | Low-Medium |
-| Streamlit | ~3 min | Very Low | ⚡ Fast | Auto-refresh | Minimal |
+| Streamlit | ~3 min | Very Low | ⚡ Fast | Auto-refresh | Low-Medium |
 | Blazor | ~10 min | Medium | ⚡ Fast | Component state | Medium |
 | Angular | ~15 min | Medium-High | 🔄 Moderate | Services/Signals | High |
-| Flutter | ~10 min | Medium | ⚡ Fast | StatefulWidget | Medium |
+| Flutter | ~10 min | Medium | ⚡ Fast | StatefulWidget | High |
 
-### Layer Toggle Implementation Complexity
+### Map + Table Implementation Complexity
 
 | Framework | Lines of Code | Implementation Approach |
 |----------|--------------|---------------------|
-| Streamlit | ~60 | Conditional layer creation in Python, sidebar checkboxes |
-| Dash | ~95 | Plotly traces, callback decorator, checklist component |
-| FastHTML | ~170 | Server-rendered HTML + direct MapLibre GL JS layer visibility handlers |
-| Svelte | ~160 | Reactive variables with bind:checked, simple toggle functions |
-| Vue | ~165 | Composition API with refs, v-model binding |
-| Next.js | ~185 | React hooks, inline styles |
-| Angular | ~190 | TypeScript class, template with property binding |
-| Blazor | ~195 | C# component state, JS interop for MapLibre GL visibility |
-| Flutter | ~200 | StatefulWidget with async layer visibility methods |
+| Streamlit | ~143 | Sidebar-driven point focus, highlighted markers, dataframe display |
+| Dash | ~299 | Callback graph updates + DataTable row selection + map click sync + modernized UI polish |
+| FastHTML | ~331 | Server-rendered table + client-side MapLibre feature/state synchronization + responsive alignment/resizing fixes |
+| Svelte | ~312 | Reactive state + row click focus + map click to row synchronization |
+| Vue | ~320 | Composition API + table/map selection sync + marker highlighting |
+| Next.js | ~291 | React state + table/map selection sync + feature-state styling |
+| Angular | ~218 (+template/CSS) | Component state + table/map sync + feature-state styling |
+| Blazor | ~196 (+JS interop) | C# table selection + JS feature tap callbacks + map focus |
+| Flutter | ~367 | Stateful map, table selection, custom tap handling, manual zoom controls |
 | Reflex | ❌ Failed | N/A - Script execution issues prevented completion |
+
+### Map-Table Interaction Reliability
+
+| Framework | Table -> Map | Map -> Table | Reliability |
+|-----------|--------------|--------------|-------------|
+| Dash | ✅ Strong | ✅ Strong | High |
+| Next.js | ✅ Strong | ✅ Strong | High |
+| Svelte | ✅ Strong | ✅ Strong | High |
+| Vue | ✅ Strong | ✅ Strong | High |
+| Angular | ✅ Strong | ✅ Strong | High |
+| Blazor | ✅ Strong | ✅ Strong | High |
+| FastHTML | ✅ Strong | ✅ Strong | High |
+| Streamlit | ✅ Good | ⚠️ Limited in native PyDeck workflow | Medium-Low |
+| Flutter | ✅ Good | ⚠️ In progress / inconsistent on web target | Medium-Low |
+| Reflex | ❌ Failed | ❌ Failed | Failed |
 
 ### Deployment Options
 
@@ -162,8 +177,8 @@ The following technologies were considered but excluded from testing for specifi
 ### Key Findings
 
 #### Best for Rapid Prototyping
-1. **Streamlit** - Python-based, 3-minute setup, 60 lines, easiest overall
-2. **Dash** - Python-based, 95 lines, good for Python developers who need more layout control
+1. **Dash** - Python-based, strong map-table synchronization, still fast to iterate
+2. **Streamlit** - Python-based, fastest setup but weaker native map-click-to-table synchronization
 3. **Svelte** - JavaScript-based, minimal boilerplate, very intuitive for JS developers
 4. **Vue** - JavaScript-based, clean syntax, good documentation
 
@@ -183,7 +198,7 @@ The following technologies were considered but excluded from testing for specifi
 **Tie: All frameworks except Flutter** - JavaScript frameworks (Svelte, Next.js, Vue, Angular), .NET framework (Blazor via JS interop), and Python frameworks (Streamlit, Dash, FastHTML) all have excellent MapLibre GL JS integration. Flutter has medium compatibility requiring a package wrapper.
 
 #### Simplest Implementation
-**Streamlit** - 60 lines of Python, built-in PyDeck with MapLibre GL JS, automatic state management.
+**Streamlit** - still the lowest setup friction, but no longer the strongest option for robust two-way map-table interaction.
 
 ## Getting Started
 
@@ -319,8 +334,9 @@ Backend integration patterns
 ### Recommended Framework by Use Case
 
 **For Python Developers:**
-- **Quick Prototyping**: Streamlit (simplest, 60 lines, automatic state management)
-- **Custom Dashboards**: Dash (more layout control, 95 lines, callback-based reactivity)
+- **Quick Prototyping**: Streamlit (simplest setup, but limited native map-click-to-table sync)
+- **Custom Dashboards / Reliable Interaction**: Dash (strong two-way map-table sync, callback-based reactivity)
+- **Custom Python Web UX**: FastHTML (strong two-way sync after layout/resizing fixes, but higher implementation overhead)
 - **⚠️ Not Recommended**: Reflex (failed - JavaScript integration issues prevent third-party library usage)
 
 **For JavaScript Developers:**
