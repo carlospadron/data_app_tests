@@ -23,3 +23,27 @@
     </label>
   </div>
 </div>
+
+<div class="table-control">
+  <h3>Points Table</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Coords</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        *ngFor="let point of pointsTable"
+        [class.selected]="selectedPointId() === point.id"
+        (click)="focusPoint(point.id)"
+      >
+        <td>{{ point.name }}</td>
+        <td>{{ point.type }}</td>
+        <td>{{ point.lat.toFixed(1) }}, {{ point.lon.toFixed(1) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

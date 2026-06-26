@@ -35,27 +35,63 @@ const pointsData = {
   features: [
     {
       type: 'Feature',
-      properties: { name: 'City A', type: 'Capital' },
+      id: 0,
+      properties: { id: 0, name: 'City A', type: 'Capital' },
       geometry: { type: 'Point', coordinates: [0, 40] }
     },
     {
       type: 'Feature',
-      properties: { name: 'City B', type: 'Major' },
+      id: 1,
+      properties: { id: 1, name: 'City B', type: 'Major' },
       geometry: { type: 'Point', coordinates: [30, 20] }
     },
     {
       type: 'Feature',
-      properties: { name: 'City C', type: 'Minor' },
+      id: 2,
+      properties: { id: 2, name: 'City C', type: 'Minor' },
       geometry: { type: 'Point', coordinates: [-5, 35] }
     }
   ]
 };
 
+const pointsTable = pointsData.features.map((feature) => ({
+  id: feature.properties.id,
+  name: feature.properties.name,
+  type: feature.properties.type,
+  lon: feature.geometry.coordinates[0],
+  lat: feature.geometry.coordinates[1]
+}));
+
 export default function Map() {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
+  const selectedPointIdRef = useRef<number | null>(null);
   const [regionsVisible, setRegionsVisible] = useState(true);
   const [pointsVisible, setPointsVisible] = useState(true);
+  const [selectedPointId, setSelectedPointId] = useState<number | null>(null);
+
+  const syncSelectedPoint = (nextId: number | null) => {
+    if (!map.current || !map.current.getSource('points')) return;
+    if (selectedPointIdRef.current !== null) {
+      map.current.setFeatureState(
+        { source: 'points', id: selectedPointIdRef.current },
+        { selected: false }
+      );
+    }
+    if (nextId !== null) {
+      map.current.setFeatureState({ source: 'points', id: nextId }, { selected: true });
+    }
+    selectedPointIdRef.current = nextId;
+    setSelectedPointId(nextId);
+  };
+
+  const focusPoint = (pointId: number) => {
+    if (!map.current) return;
+    const point = pointsTable.find((entry) => entry.id === pointId);
+    if (!point) return;
+    map.current.flyTo({ center: [point.lon, point.lat], zoom: 5, essential: true });
+    syncSelectedPoint(pointId);
+  };
 
   useEffect(() => {
     if (map.current) return; // Initialize map only once
@@ -112,10 +148,31 @@ export default function Map() {
           type: 'circle',
           source: 'points',
           paint: {
-            'circle-radius': 8,
-            'circle-color': '#f30',
+            'circle-radius': ['case', ['boolean', ['feature-state', 'selected'], false], 11, 8] as any,
+            'circle-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#facc15', '#f30'] as any,
             'circle-stroke-color': '#fff',
-            'circle-stroke-width': 2
+            'circle-stroke-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 2] as any
+          }
+        });
+
+        map.current.on('click', 'points', (event) => {
+          const feature = event.features?.[0];
+          if (!feature || !feature.properties) return;
+          const id = Number((feature.properties as Record<string, unknown>).id);
+          if (!Number.isNaN(id)) {
+            focusPoint(id);
+          }
+        });
+
+        map.current.on('mouseenter', 'points', () => {
+          if (map.current) {
+            map.current.getCanvas().style.cursor = 'pointer';
+          }
+        });
+
+        map.current.on('mouseleave', 'points', () => {
+          if (map.current) {
+            map.current.getCanvas().style.cursor = '';
           }
         });
       });
@@ -185,6 +242,49 @@ export default function Map() {
             Points of Interest
           </label>
         </div>
+      </div>
+
+      <div style={{
+        position: 'absolute',
+        right: '10px',
+        bottom: '10px',
+        background: 'white',
+        padding: '12px',
+        borderRadius: '4px',
+        boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
+        zIndex: 1,
+        minWidth: '320px'
+      }}>
+        <h3 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: 'bold' }}>
+          Points Table
+        </h3>
+        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+          <thead>
+            <tr>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: '6px' }}>Name</th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: '6px' }}>Type</th>
+              <th style={{ textAlign: 'left', borderBottom: '1px solid #ddd', padding: '6px' }}>Coords</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pointsTable.map((point) => (
+              <tr
+                key={point.id}
+                onClick={() => focusPoint(point.id)}
+                style={{
+                  cursor: 'pointer',
+                  background: selectedPointId === point.id ? '#fef3c7' : 'transparent'
+                }}
+              >
+                <td style={{ padding: '6px', borderBottom: '1px solid #f0f0f0' }}>{point.name}</td>
+                <td style={{ padding: '6px', borderBottom: '1px solid #f0f0f0' }}>{point.type}</td>
+                <td style={{ padding: '6px', borderBottom: '1px solid #f0f0f0' }}>
+                  {point.lat.toFixed(1)}, {point.lon.toFixed(1)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </>
   );
