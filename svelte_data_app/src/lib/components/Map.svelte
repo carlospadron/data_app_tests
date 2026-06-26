@@ -34,27 +34,57 @@
 		features: [
 			{
 				type: 'Feature',
-				properties: { name: 'City A', type: 'Capital' },
+				id: 0,
+				properties: { id: 0, name: 'City A', type: 'Capital' },
 				geometry: { type: 'Point', coordinates: [0, 40] }
 			},
 			{
 				type: 'Feature',
-				properties: { name: 'City B', type: 'Major' },
+				id: 1,
+				properties: { id: 1, name: 'City B', type: 'Major' },
 				geometry: { type: 'Point', coordinates: [30, 20] }
 			},
 			{
 				type: 'Feature',
-				properties: { name: 'City C', type: 'Minor' },
+				id: 2,
+				properties: { id: 2, name: 'City C', type: 'Minor' },
 				geometry: { type: 'Point', coordinates: [-5, 35] }
 			}
 		]
 	};
+
+	const pointsTable = pointsData.features.map((feature) => ({
+		id: feature.properties.id,
+		name: feature.properties.name,
+		type: feature.properties.type,
+		lon: feature.geometry.coordinates[0],
+		lat: feature.geometry.coordinates[1]
+	}));
 
 	let mapContainer;
 	let map;
 	let mapLoaded = false;
 	let regionsVisible = true;
 	let pointsVisible = true;
+	let selectedPointId = null;
+
+	function syncSelectedPoint(nextId) {
+		if (!map || !mapLoaded) return;
+		if (selectedPointId !== null) {
+			map.setFeatureState({ source: 'points', id: selectedPointId }, { selected: false });
+		}
+		if (nextId !== null) {
+			map.setFeatureState({ source: 'points', id: nextId }, { selected: true });
+		}
+		selectedPointId = nextId;
+	}
+
+	function focusPoint(pointId) {
+		const point = pointsTable.find((entry) => entry.id === pointId);
+		if (!point || !map) return;
+		map.flyTo({ center: [point.lon, point.lat], zoom: 5, essential: true });
+		syncSelectedPoint(pointId);
+	}
 
 	onMount(() => {
 		map = new maplibregl.Map({
@@ -108,11 +138,28 @@
 				type: 'circle',
 				source: 'points',
 				paint: {
-					'circle-radius': 8,
-					'circle-color': '#f30',
+					'circle-radius': ['case', ['boolean', ['feature-state', 'selected'], false], 11, 8],
+					'circle-color': ['case', ['boolean', ['feature-state', 'selected'], false], '#facc15', '#f30'],
 					'circle-stroke-color': '#fff',
-					'circle-stroke-width': 2
+					'circle-stroke-width': ['case', ['boolean', ['feature-state', 'selected'], false], 3, 2]
 				}
+			});
+
+			map.on('click', 'points', (event) => {
+				const feature = event.features?.[0];
+				if (!feature?.properties) return;
+				const id = Number(feature.properties.id);
+				if (!Number.isNaN(id)) {
+					focusPoint(id);
+				}
+			});
+
+			map.on('mouseenter', 'points', () => {
+				map.getCanvas().style.cursor = 'pointer';
+			});
+
+			map.on('mouseleave', 'points', () => {
+				map.getCanvas().style.cursor = '';
 			});
 		});
 	});
@@ -155,6 +202,31 @@
 	</div>
 </div>
 
+<div class="table-control">
+	<h3>Points Table</h3>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Type</th>
+				<th>Coords</th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each pointsTable as point}
+				<tr
+					class:selected={selectedPointId === point.id}
+					on:click={() => focusPoint(point.id)}
+				>
+					<td>{point.name}</td>
+					<td>{point.type}</td>
+					<td>{point.lat.toFixed(1)}, {point.lon.toFixed(1)}</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
+
 <style>
 	.map-container {
 		width: 100%;
@@ -193,5 +265,48 @@
 	.layer-item input[type='checkbox'] {
 		margin-right: 8px;
 		cursor: pointer;
+	}
+
+	.table-control {
+		position: absolute;
+		right: 10px;
+		bottom: 10px;
+		background: white;
+		padding: 12px;
+		border-radius: 4px;
+		box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+		z-index: 1;
+		min-width: 320px;
+	}
+
+	.table-control h3 {
+		margin: 0 0 8px 0;
+		font-size: 16px;
+		font-weight: bold;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 13px;
+	}
+
+	th,
+	td {
+		text-align: left;
+		padding: 6px;
+		border-bottom: 1px solid #f0f0f0;
+	}
+
+	thead th {
+		border-bottom: 1px solid #ddd;
+	}
+
+	tbody tr {
+		cursor: pointer;
+	}
+
+	tbody tr.selected {
+		background: #fef3c7;
 	}
 </style>
